@@ -10,24 +10,6 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   return (
-    // <div className="flex-row">
-    //   <div className="border items-center flex flex-wrap bg-secondary">
-    //     <div className="basis-1/2 rounded-2xl">
-    //       <img
-    //         src="/vignette bateau.JPG"
-    //         alt="bateau"
-    //         className="rounded-3xl my-8 mx-8"
-    //       ></img>
-    //     </div>
-    //     <div className="text-center justify-center basis-1/2">
-    //       <p className="my-8">Une envie de vistier les terres du nord </p>
-    //       <Button className="rounded" variant={"outline"}>
-    //         Embarquez pour l'aventure
-    //       </Button>
-    //     </div>
-    //   </div>
-    // </div>
-
     <div className="flex flex-col items-center bg-neutral min-h-screen p-4">
       <div className="flex flex-col md:flex-row items-center border-accent border  rounded-2xl bg-accent shadow-lg p-6  mx-auto my-2">
         <div className="w-full md:w-1/2 p-4">
