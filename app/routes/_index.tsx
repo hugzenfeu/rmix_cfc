@@ -1,41 +1,89 @@
 import type { MetaFunction } from "@remix-run/node";
+import { Button } from "@/components/ui/button";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
+    { title: "CFC" },
+    { name: "description", content: "Welcome to CFC!" },
   ];
 };
 
 export default function Index() {
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <h1>Welcome to Remix</h1>
-      <ul>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/blog"
-            rel="noreferrer"
-          >
-            15m Quickstart Blog Tutorial
-          </a>
-        </li>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/jokes"
-            rel="noreferrer"
-          >
-            Deep Dive Jokes App Tutorial
-          </a>
-        </li>
-        <li>
-          <a target="_blank" href="https://remix.run/docs" rel="noreferrer">
-            Remix Docs
-          </a>
-        </li>
-      </ul>
+    // <div className="flex-row">
+    //   <div className="border items-center flex flex-wrap bg-secondary">
+    //     <div className="basis-1/2 rounded-2xl">
+    //       <img
+    //         src="/vignette bateau.JPG"
+    //         alt="bateau"
+    //         className="rounded-3xl my-8 mx-8"
+    //       ></img>
+    //     </div>
+    //     <div className="text-center justify-center basis-1/2">
+    //       <p className="my-8">Une envie de vistier les terres du nord </p>
+    //       <Button className="rounded" variant={"outline"}>
+    //         Embarquez pour l'aventure
+    //       </Button>
+    //     </div>
+    //   </div>
+    // </div>
+
+    <div className="flex flex-col items-center bg-neutral min-h-screen p-4">
+      <div className="flex flex-col md:flex-row items-center border-accent border  rounded-2xl bg-accent shadow-lg p-6  mx-auto my-2">
+        <div className="w-full md:w-1/2 p-4">
+          <img
+            src="/vignette bateau.JPG"
+            alt="bateau"
+            className="rounded-2xl w-full"
+          />
+        </div>
+        <div className="w-full md:w-1/2 p-4 flex flex-col items-center justify-center text-center">
+          <p className="mb-8 text-lg font-semibold text-gray-700">
+            Location de voiliers dans le Morbihan et en Bretagne Sud
+          </p>
+          <p className="mb-8 text-lg  text-gray-700">
+            Visitez le Golfe du Morbihan ou prenez le large et partez à la
+            découverte de Belle-Île-en-Mer, Houat ou Hœdic. CFC dispose de 40
+            voiliers habitables.
+          </p>
+          <Button className="rounded-md px-6 py-2 bg-primary text-white hover:bg-primary-dark">
+            Embarquez pour l'aventure
+          </Button>
+        </div>
+      </div>
+      <div className="flex flex-col md:flex-row items-center border-accent border  rounded-2xl bg-accent shadow-lg p-6  mx-auto my-2">
+        <div className="w-full md:w-1/2 p-4 flex flex-col items-center justify-center text-center">
+          <p className="mb-8 text-lg font-semibold text-gray-700">
+            Vous recherchez une agence de location de bateaux en Bretagne Sud ?
+            Vous êtes au bon endroit !
+          </p>
+          <p className="mb-8 text-lg  text-gray-700">
+            Basé sur le port de La Trinité-sur-Mer, CFC propose des monocoques
+            et des catamarans à la location. Louer un bateau au départ de la
+            Trinité sur Mer permet de (re)découvrir les nombreuses îles du
+            Morbihan durant un week-end ou une semaine. Nos voiliers sont
+            habitables et tous bien équipés (réfrigérateur, eau chaude,
+            chauffage, pilote automatique, traceur GPS…). Le confort à bord de
+            nos bateaux est au centre de toutes nos préoccupations. Quels que
+            soient vos envies de programme, votre expérience ou votre budget
+            notre équipe saura vous conseiller sur le choix du voilier le mieux
+            adapté.
+          </p>
+          <p className="mb-8 text-lg font-semibold text-gray-700">
+            Pour découvrir notre flotte c’est ici:
+          </p>
+          <Button className="rounded-md px-6 py-2 bg-primary text-white hover:bg-primary-dark">
+            Nos voiliers
+          </Button>
+        </div>
+        <div className="w-full md:w-1/2 p-4">
+          <img
+            src="/first36-nav2.jpg.jpeg"
+            alt="bateau"
+            className="rounded-2xl w-full"
+          />
+        </div>
+      </div>
     </div>
   );
 }

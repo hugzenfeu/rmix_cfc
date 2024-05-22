@@ -5,6 +5,16 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
+import { LinksFunction } from "@remix-run/node";
+
+import stylesheet from "~/globals.css?url";
+
+import Header from "./components/common/Header";
+import Footer from "./components/common/Footer";
+
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: stylesheet },
+];
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -15,15 +25,25 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body>
-        {children}
-        <ScrollRestoration />
-        <Scripts />
+      <body className="bg-background font-sans antialiased">
+        <div className="flex flex-col bg-background min-h-screen">
+          <Header />
+          <main className="flex-1">{children}</main>
+
+          <Footer />
+
+          <ScrollRestoration />
+          <Scripts />
+        </div>
       </body>
     </html>
   );
 }
 
 export default function App() {
-  return <Outlet />;
+  return (
+    // <Layout>
+    <Outlet />
+    // </Layout>
+  );
 }
