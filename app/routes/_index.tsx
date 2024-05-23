@@ -10,36 +10,36 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   return (
-    <div className="flex flex-col items-center bg-neutral min-h-screen p-4">
-      <div className="flex flex-col md:flex-row items-center border-accent border  rounded-2xl bg-accent shadow-lg p-6  mx-auto my-2">
-        <div className="w-full md:w-1/2 p-4">
+    <div className="flex flex-col items-center bg-neutral min-h-screen p-4 mx-16">
+      <div className="flex flex-col lg:flex-row items-center border-accent  rounded-2xl bg-secondary shadow-lg p-6  mx-auto my-2">
+        <div className="w-full lg:w-1/2 p-4">
           <img
             src="/vignette bateau.JPG"
             alt="bateau"
-            className="rounded-2xl w-full"
+            className="rounded-2xl "
           />
         </div>
-        <div className="w-full md:w-1/2 p-4 flex flex-col items-center justify-center text-center">
-          <p className="mb-8 text-lg font-semibold text-gray-700">
+        <div className="w-full lg:w-1/2 p-4 flex flex-col items-center justify-center text-center ">
+          <p className="mb-8 text-lg font-semibold text-primary">
             Location de voiliers dans le Morbihan et en Bretagne Sud
           </p>
-          <p className="mb-8 text-lg  text-gray-700">
+          <p className="mb-8 text-lg  text-primary">
             Visitez le Golfe du Morbihan ou prenez le large et partez à la
             découverte de Belle-Île-en-Mer, Houat ou Hœdic. CFC dispose de 40
             voiliers habitables.
           </p>
-          <Button className="rounded-md px-6 py-2 bg-primary text-white hover:bg-primary-dark">
+          <Button className="rounded-md px-6 py-2 bg-primary text-secondary hover:bg-primary-dark">
             Embarquez pour l'aventure
           </Button>
         </div>
       </div>
-      <div className="flex flex-col md:flex-row items-center border-accent border  rounded-2xl bg-accent shadow-lg p-6  mx-auto my-2">
-        <div className="w-full md:w-1/2 p-4 flex flex-col items-center justify-center text-center">
-          <p className="mb-8 text-lg font-semibold text-gray-700">
+      <div className="flex flex-col-reverse lg:flex-row items-center border-accent  rounded-2xl bg-secondary shadow-lg p-6  mx-auto my-2">
+        <div className="w-full lg:w-1/2 p-4 flex flex-col items-center justify-center text-center">
+          <p className="mb-8 text-lg font-semibold text-primary">
             Vous recherchez une agence de location de bateaux en Bretagne Sud ?
             Vous êtes au bon endroit !
           </p>
-          <p className="mb-8 text-lg  text-gray-700">
+          <p className="mb-8 text-lg  text-primary">
             Basé sur le port de La Trinité-sur-Mer, CFC propose des monocoques
             et des catamarans à la location. Louer un bateau au départ de la
             Trinité sur Mer permet de (re)découvrir les nombreuses îles du
@@ -51,14 +51,14 @@ export default function Index() {
             notre équipe saura vous conseiller sur le choix du voilier le mieux
             adapté.
           </p>
-          <p className="mb-8 text-lg font-semibold text-gray-700">
+          <p className="mb-8 text-lg font-semibold text-primary">
             Pour découvrir notre flotte c’est ici:
           </p>
-          <Button className="rounded-md px-6 py-2 bg-primary text-white hover:bg-primary-dark">
+          <Button className="rounded-md px-6 py-2 bg-primary text-secondary hover:bg-primary-dark">
             Nos voiliers
           </Button>
         </div>
-        <div className="w-full md:w-1/2 p-4">
+        <div className="w-full lg:w-1/2 p-4">
           <img
             src="/first36-nav2.jpg.jpeg"
             alt="bateau"
