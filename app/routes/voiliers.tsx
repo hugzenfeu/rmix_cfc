@@ -1,20 +1,20 @@
 import { Component } from "lucide-react";
-import Test from "~/components/containers/Test";
+import Voilier from "~/components/containers/Voilier";
 
 export default function voiliers() {
   return (
     <div className="flex flex-wrap">
-      <Test />
-      <Test />
-      <Test />
-      <Test />
-      <Test />
-      <Test />
+      <Voilier />
+      <Voilier />
+      <Voilier />
+      <Voilier />
+      <Voilier />
+      <Voilier />
 
-      <Test />
-      <Test />
-      <Test />
-      <Test />
+      <Voilier />
+      <Voilier />
+      <Voilier />
+      <Voilier />
     </div>
   );
 }

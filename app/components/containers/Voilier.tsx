@@ -14,7 +14,7 @@ import { Card } from "@/components/ui/card";
 import { SVGProps } from "react";
 import { JSX } from "react/jsx-runtime";
 
-export default function Test() {
+export default function Voilier() {
   return (
     <Card className="w-1/3 max-w-md ml-4 mt-4 ">
       <div className="relative ">
