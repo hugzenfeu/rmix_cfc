@@ -26,9 +26,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className="bg-background font-sans antialiased">
-        <div className="flex flex-col bg-background min-h-screen">
+        <div className="bg-background min-h-screen">
           <Header />
-          <main className="flex-1">{children}</main>
+          <main>{children}</main>
           <Footer />
           <ScrollRestoration />
           <Scripts />

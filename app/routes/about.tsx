@@ -1,3 +1,8 @@
+import Test from "../components/containers/Test";
 export default function about() {
-  return <h1>about</h1>;
+  return (
+    <div className="flex flex-wrap">
+      <Test />
+    </div>
+  );
 }
