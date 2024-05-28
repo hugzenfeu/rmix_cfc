@@ -55,7 +55,7 @@ export default function Header() {
 
   return (
     <header>
-      <div className="border sticky flex-col h-16 bg-background top-0 min-h-32">
+      <div className="border sticky flex-col h-16 bg-background top-0 min-h-32 z-50">
         {/* Langues */}
         <div className="flex justify-end gap-8 px-8 bg-secondary">
           <Link key="Francais" to="/">
