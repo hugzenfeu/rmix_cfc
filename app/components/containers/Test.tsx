@@ -51,7 +51,7 @@ export default function Test() {
           <CarouselPrevious className="absolute top-1/2 left-4 -translate-y-1/2 z-10 bg-white/50 hover:bg-white/80 p-2 rounded-full shadow-md transition-colors" />
           <CarouselNext className="absolute top-1/2 right-4 -translate-y-1/2 z-10 bg-white/50 hover:bg-white/80 p-2 rounded-full shadow-md transition-colors" />
         </Carousel>
-        <div className="absolute top-4 right-4 bg-gray-900/80 text-white px-3 py-1 rounded-md font-medium text-sm">
+        <div className="absolute top-2 right-2 bg-gray-900/80 text-white px-3 py-1 rounded-md font-medium text-sm">
           $1500
         </div>
         <div className="absolute bottom-0 left-0 bg-yellow-500/60 text-white px-8 py-4 rounded-tr-3xl font-medium text-sm">
