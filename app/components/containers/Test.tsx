@@ -19,13 +19,13 @@ export default function Test() {
     <Card className="w-1/3 max-w-md ml-4 mt-4 ">
       <div className="relative ">
         <Carousel className="rounded-t-lg container">
-          <CarouselContent className="flex overflow-hidden">
+          <CarouselContent className="flex ">
             <CarouselItem>
               <img
                 alt="Product Image"
                 className="aspect-[3/2] w-full object-cover"
                 height={400}
-                src="/first36-nav2.jpg.jpeg"
+                src="/vignette bateau.JPG"
                 width={600}
               />
             </CarouselItem>
@@ -52,11 +52,14 @@ export default function Test() {
           <CarouselNext className="absolute top-1/2 right-4 -translate-y-1/2 z-10 bg-white/50 hover:bg-white/80 p-2 rounded-full shadow-md transition-colors" />
         </Carousel>
         <div className="absolute top-4 right-4 bg-gray-900/80 text-white px-3 py-1 rounded-md font-medium text-sm">
-          $99
+          $1500
+        </div>
+        <div className="absolute bottom-0 left-0 bg-yellow-500/60 text-white px-8 py-4 rounded-tr-3xl font-medium text-sm">
+          6 personnes
         </div>
       </div>
       <div className="p-4">
-        <h3 className="font-bold text-xl">Acme Prism Tee</h3>
+        <h3 className="font-bold text-xl">Bateau</h3>
         <div className="flex items-center gap-4 mt-2">
           <div className="flex items-center gap-1">
             <StarIcon className="w-5 h-5 fill-primary" />
@@ -73,19 +76,19 @@ export default function Test() {
           <div className="flex items-center gap-2">
             <ShirtIcon className="w-5 h-5 fill-muted" />
             <span className="text-sm text-gray-500 dark:text-gray-400">
-              Cotton Blend
+              2 cabines
             </span>
           </div>
           <div className="flex items-center gap-2">
             <RulerIcon className="w-5 h-5 fill-muted" />
             <span className="text-sm text-gray-500 dark:text-gray-400">
-              Regular Fit
+              quillard
             </span>
           </div>
           <div className="flex items-center gap-2">
             <WashingMachineIcon className="w-5 h-5 fill-muted" />
             <span className="text-sm text-gray-500 dark:text-gray-400">
-              Machine Washable
+              8.95m
             </span>
           </div>
         </div>
