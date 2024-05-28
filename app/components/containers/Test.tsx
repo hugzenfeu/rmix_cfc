@@ -16,10 +16,19 @@ import { JSX } from "react/jsx-runtime";
 
 export default function Test() {
   return (
-    <Card className="w-full max-w-md">
-      <div className="relative">
-        <Carousel className="rounded-t-lg">
-          <CarouselContent>
+    <Card className="w-1/3 max-w-md ml-4 mt-4 ">
+      <div className="relative ">
+        <Carousel className="rounded-t-lg container">
+          <CarouselContent className="flex overflow-hidden">
+            <CarouselItem>
+              <img
+                alt="Product Image"
+                className="aspect-[3/2] w-full object-cover"
+                height={400}
+                src="/first36-nav2.jpg.jpeg"
+                width={600}
+              />
+            </CarouselItem>
             <CarouselItem>
               <img
                 alt="Product Image"
@@ -34,24 +43,15 @@ export default function Test() {
                 alt="Product Image"
                 className="aspect-[3/2] w-full object-cover"
                 height={400}
-                src="/menu.svg"
-                width={600}
-              />
-            </CarouselItem>
-            <CarouselItem>
-              <img
-                alt="Product Image"
-                className="aspect-[3/2] w-full object-cover"
-                height={400}
                 src="/glenan.jpeg"
                 width={600}
               />
             </CarouselItem>
           </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
+          <CarouselPrevious className="absolute top-1/2 left-4 -translate-y-1/2 z-10 bg-white/50 hover:bg-white/80 p-2 rounded-full shadow-md transition-colors" />
+          <CarouselNext className="absolute top-1/2 right-4 -translate-y-1/2 z-10 bg-white/50 hover:bg-white/80 p-2 rounded-full shadow-md transition-colors" />
         </Carousel>
-        <div className="absolute top-4 right-4 bg-gray-900 text-white px-3 py-1 rounded-md font-medium text-sm">
+        <div className="absolute top-4 right-4 bg-gray-900/80 text-white px-3 py-1 rounded-md font-medium text-sm">
           $99
         </div>
       </div>
