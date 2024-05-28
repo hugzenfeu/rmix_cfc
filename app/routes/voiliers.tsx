@@ -1,3 +1,3 @@
 export default function voiliers() {
-  return <h1>location</h1>;
+  return <h1>voiliers</h1>;
 }
