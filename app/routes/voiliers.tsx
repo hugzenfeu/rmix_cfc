@@ -1,4 +1,3 @@
-import { Component } from "lucide-react";
 import Voilier from "~/components/containers/Voilier";
 
 export default function voiliers() {
