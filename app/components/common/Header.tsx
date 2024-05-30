@@ -59,6 +59,11 @@ export default function Header() {
     setIsMenuFolded(!isMenuFolded);
   };
 
+  const toggleSubRoutes = (event) => {
+    event.stopPropagation();
+    event.currentTarget.nextSibling.classList.toggle("hidden");
+  };
+
   return (
     <header>
       <div className="border sticky flex-col h-16 bg-background top-0 min-h-32 z-50">
@@ -128,7 +133,9 @@ export default function Header() {
               />
               <label
                 htmlFor="menu-toggle"
-                className="peer-checked/input:hidden text-primary cursor-pointer"
+                className={`${
+                  isMenuFolded ? "block" : "hidden"
+                } text-primary cursor-pointer`}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -147,7 +154,9 @@ export default function Header() {
               </label>
               <label
                 htmlFor="menu-toggle"
-                className="hidden peer-checked/input:block text-primary cursor-pointer"
+                className={`${
+                  isMenuFolded ? "hidden" : "block"
+                } text-primary cursor-pointer`}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -168,39 +177,43 @@ export default function Header() {
           </div>
           {/* Mobile Menu Links */}
           <div
-            className={` items-center gap-4 bg-background ${
+            className={`items-center gap-4 bg-background ${
               isMenuFolded ? "hidden" : "block"
-            } `}
+            }`}
           >
             {routes.map((route) => (
               <div
                 key={route.name}
                 className="relative group w-full text-center"
               >
-                <NavLink
-                  to={route.to}
-                  className={({ isActive }) =>
-                    "block transition-colors hover:text-accent-foreground py-4 " +
-                    (isActive ? "text-foreground" : "text-foreground/60")
-                  }
-                  onClick={toggleMenu}
-                >
-                  {route.name}
-                  {route.children && route.children.length > 0 && (
-                    <span className="ml-2">&#9662;</span> // Down arrow indicator
-                  )}
-                </NavLink>
+                {/* Render NavLink only if there are no sub-routes */}
+                {!route.children || route.children.length === 0 ? (
+                  <NavLink
+                    to={route.to}
+                    className="block transition-colors  py-4"
+                    onClick={toggleMenu}
+                  >
+                    {route.name}
+                  </NavLink>
+                ) : (
+                  // Render a span instead of NavLink if there are sub-routes
+                  <span
+                    className="block cursor-pointer transition-colors py-4"
+                    onClick={toggleSubRoutes}
+                  >
+                    {route.name} &#9662;
+                  </span>
+                )}
                 {route.children && route.children.length > 0 && (
-                  <div className="w-full bg-background hidden  border border-secondary rounded shadow-lg group-hover:block">
+                  <div
+                    className={`flex w-full bg-background border hidden border-secondary rounded shadow-lg flex-col`}
+                  >
                     {route.children.map((subRoute) => (
                       <NavLink
                         key={subRoute.name}
                         to={subRoute.to}
                         onClick={toggleMenu}
-                        className={({ isActive }) =>
-                          "block px-4 py-2 text-sm text-primary hover:bg-secondary " +
-                          (isActive ? "bg-accent" : "")
-                        }
+                        className=" w-full px-2 py-2 text-sm text-primary "
                       >
                         {subRoute.name}
                       </NavLink>
