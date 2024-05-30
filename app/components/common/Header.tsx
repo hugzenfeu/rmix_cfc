@@ -59,9 +59,12 @@ export default function Header() {
     setIsMenuFolded(!isMenuFolded);
   };
 
-  const toggleSubRoutes = (event) => {
+  const toggleSubRoutes = (event: React.MouseEvent<HTMLSpanElement>) => {
     event.stopPropagation();
-    event.currentTarget.nextSibling.classList.toggle("hidden");
+    const nextSibling = event.currentTarget.nextSibling as HTMLElement | null;
+    if (nextSibling && nextSibling.nodeType === Node.ELEMENT_NODE) {
+      nextSibling.classList.toggle("hidden");
+    }
   };
 
   return (
@@ -119,7 +122,7 @@ export default function Header() {
           </nav>
         </div>
         {/* mobile */}
-        <nav className="lg:hidden  gap-8  py-4 bg-background ">
+        <nav className="lg:hidden  gap-8  pt-4 bg-background ">
           <div className="flex items-center min-w-32 justify-start ">
             <NavLink key="home" to="/">
               <img src="/image.png" alt="home" className="px-8 h-16 j-auto" />
@@ -177,7 +180,7 @@ export default function Header() {
           </div>
           {/* Mobile Menu Links */}
           <div
-            className={`items-center gap-4 bg-background ${
+            className={`items-center  mt-6 bg-background border shadow ${
               isMenuFolded ? "hidden" : "block"
             }`}
           >
@@ -190,7 +193,7 @@ export default function Header() {
                 {!route.children || route.children.length === 0 ? (
                   <NavLink
                     to={route.to}
-                    className="block transition-colors  py-4"
+                    className="block   py-4"
                     onClick={toggleMenu}
                   >
                     {route.name}
@@ -198,7 +201,7 @@ export default function Header() {
                 ) : (
                   // Render a span instead of NavLink if there are sub-routes
                   <span
-                    className="block cursor-pointer transition-colors py-4"
+                    className="block cursor-pointer  py-4"
                     onClick={toggleSubRoutes}
                   >
                     {route.name} &#9662;
@@ -206,7 +209,7 @@ export default function Header() {
                 )}
                 {route.children && route.children.length > 0 && (
                   <div
-                    className={`flex w-full bg-background border hidden border-secondary rounded shadow-lg flex-col`}
+                    className={`flex flex-col hidden  border-y-4  mx-16 border-secondary rounded `}
                   >
                     {route.children.map((subRoute) => (
                       <NavLink
