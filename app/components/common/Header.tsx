@@ -1,5 +1,5 @@
 import { Link, NavLink } from "@remix-run/react";
-
+import { useState } from "react";
 export default function Header() {
   const routes = [
     {
@@ -52,6 +52,12 @@ export default function Header() {
       children: [],
     },
   ];
+
+  const [isMenuFolded, setIsMenuFolded] = useState(true);
+
+  const toggleMenu = () => {
+    setIsMenuFolded(!isMenuFolded);
+  };
 
   return (
     <header>
@@ -109,7 +115,7 @@ export default function Header() {
         </div>
         {/* mobile */}
         <nav className="lg:hidden  gap-8  py-4 bg-background ">
-          <div className="flex items-center min-w-32 justify-start peer/toggle">
+          <div className="flex items-center min-w-32 justify-start ">
             <NavLink key="home" to="/">
               <img src="/image.png" alt="home" className="px-8 h-16 j-auto" />
             </NavLink>
@@ -118,6 +124,7 @@ export default function Header() {
                 type="checkbox"
                 id="menu-toggle"
                 className="hidden peer/input"
+                onClick={toggleMenu}
               />
               <label
                 htmlFor="menu-toggle"
@@ -160,7 +167,11 @@ export default function Header() {
             </div>
           </div>
           {/* Mobile Menu Links */}
-          <div className="hidden items-center gap-4 bg-background peer-has-[:checked]/toggle:block ">
+          <div
+            className={` items-center gap-4 bg-background ${
+              isMenuFolded ? "hidden" : "block"
+            } `}
+          >
             {routes.map((route) => (
               <div
                 key={route.name}
@@ -172,6 +183,7 @@ export default function Header() {
                     "block transition-colors hover:text-accent-foreground py-4 " +
                     (isActive ? "text-foreground" : "text-foreground/60")
                   }
+                  onClick={toggleMenu}
                 >
                   {route.name}
                   {route.children && route.children.length > 0 && (
@@ -184,6 +196,7 @@ export default function Header() {
                       <NavLink
                         key={subRoute.name}
                         to={subRoute.to}
+                        onClick={toggleMenu}
                         className={({ isActive }) =>
                           "block px-4 py-2 text-sm text-primary hover:bg-secondary " +
                           (isActive ? "bg-accent" : "")
