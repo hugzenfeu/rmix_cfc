@@ -1,5 +1,5 @@
 import { Link, NavLink } from "@remix-run/react";
-
+import { useState } from "react";
 export default function Header() {
   const routes = [
     {
@@ -52,6 +52,20 @@ export default function Header() {
       children: [],
     },
   ];
+
+  const [isMenuFolded, setIsMenuFolded] = useState(true);
+
+  const toggleMenu = () => {
+    setIsMenuFolded(!isMenuFolded);
+  };
+
+  const toggleSubRoutes = (event: React.MouseEvent<HTMLSpanElement>) => {
+    event.stopPropagation();
+    const nextSibling = event.currentTarget.nextSibling as HTMLElement | null;
+    if (nextSibling && nextSibling.nodeType === Node.ELEMENT_NODE) {
+      nextSibling.classList.toggle("hidden");
+    }
+  };
 
   return (
     <header>
@@ -108,8 +122,8 @@ export default function Header() {
           </nav>
         </div>
         {/* mobile */}
-        <nav className="lg:hidden  gap-8  py-4 bg-background ">
-          <div className="flex items-center min-w-32 justify-start peer/toggle">
+        <nav className="lg:hidden  gap-8  pt-4 bg-background ">
+          <div className="flex items-center min-w-32 justify-start ">
             <NavLink key="home" to="/">
               <img src="/image.png" alt="home" className="px-8 h-16 j-auto" />
             </NavLink>
@@ -118,10 +132,13 @@ export default function Header() {
                 type="checkbox"
                 id="menu-toggle"
                 className="hidden peer/input"
+                onClick={toggleMenu}
               />
               <label
                 htmlFor="menu-toggle"
-                className="peer-checked/input:hidden text-primary cursor-pointer"
+                className={`${
+                  isMenuFolded ? "block" : "hidden"
+                } text-primary cursor-pointer`}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -140,7 +157,9 @@ export default function Header() {
               </label>
               <label
                 htmlFor="menu-toggle"
-                className="hidden peer-checked/input:block text-primary cursor-pointer"
+                className={`${
+                  isMenuFolded ? "hidden" : "block"
+                } text-primary cursor-pointer`}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -160,34 +179,44 @@ export default function Header() {
             </div>
           </div>
           {/* Mobile Menu Links */}
-          <div className="hidden items-center gap-4 bg-background peer-has-[:checked]/toggle:block ">
+          <div
+            className={`items-center  mt-6 bg-background border shadow ${
+              isMenuFolded ? "hidden" : "block"
+            }`}
+          >
             {routes.map((route) => (
               <div
                 key={route.name}
                 className="relative group w-full text-center"
               >
-                <NavLink
-                  to={route.to}
-                  className={({ isActive }) =>
-                    "block transition-colors hover:text-accent-foreground py-4 " +
-                    (isActive ? "text-foreground" : "text-foreground/60")
-                  }
-                >
-                  {route.name}
-                  {route.children && route.children.length > 0 && (
-                    <span className="ml-2">&#9662;</span> // Down arrow indicator
-                  )}
-                </NavLink>
+                {/* Render NavLink only if there are no sub-routes */}
+                {!route.children || route.children.length === 0 ? (
+                  <NavLink
+                    to={route.to}
+                    className="block   py-4"
+                    onClick={toggleMenu}
+                  >
+                    {route.name}
+                  </NavLink>
+                ) : (
+                  // Render a span instead of NavLink if there are sub-routes
+                  <span
+                    className="block cursor-pointer  py-4"
+                    onClick={toggleSubRoutes}
+                  >
+                    {route.name} &#9662;
+                  </span>
+                )}
                 {route.children && route.children.length > 0 && (
-                  <div className="w-full bg-background hidden  border border-secondary rounded shadow-lg group-hover:block">
+                  <div
+                    className={`flex flex-col hidden  border-y-4  mx-16 border-secondary rounded `}
+                  >
                     {route.children.map((subRoute) => (
                       <NavLink
                         key={subRoute.name}
                         to={subRoute.to}
-                        className={({ isActive }) =>
-                          "block px-4 py-2 text-sm text-primary hover:bg-secondary " +
-                          (isActive ? "bg-accent" : "")
-                        }
+                        onClick={toggleMenu}
+                        className=" w-full px-2 py-2 text-sm text-primary "
                       >
                         {subRoute.name}
                       </NavLink>
