@@ -14,7 +14,7 @@ export default function Index() {
       <div className="flex flex-col lg:flex-row items-center border-accent  rounded-2xl bg-secondary shadow-lg p-6  mx-auto my-2">
         <div className="w-full lg:w-1/2 p-4">
           <img
-            src="/vignette bateau.JPG"
+            src="https://filjhbmunjsumdqyuiwj.supabase.co/storage/v1/object/sign/Bateaux/vignette_bateau.JPG?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJCYXRlYXV4L3ZpZ25ldHRlX2JhdGVhdS5KUEciLCJpYXQiOjE3MTcwOTc0MTAsImV4cCI6MTc0ODYzMzQxMH0.HZcYDt6QJ0WO7yH65Ej48JDUAs0lDEgwYTXGrPCLkes&t=2024-05-30T19%3A30%3A10.521Z"
             alt="bateau"
             className="rounded-2xl "
           />
@@ -60,7 +60,7 @@ export default function Index() {
         </div>
         <div className="w-full lg:w-1/2 p-4">
           <img
-            src="/first36-nav2.jpg.jpeg"
+            src="https://filjhbmunjsumdqyuiwj.supabase.co/storage/v1/object/sign/Bateaux/first36-nav2.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJCYXRlYXV4L2ZpcnN0MzYtbmF2Mi5qcGciLCJpYXQiOjE3MTcwOTc0MjYsImV4cCI6MTc0ODYzMzQyNn0.K3Gxxwosuj7KI4PJb0DKkZ8e1A17GG78MfRf59u_j4I&t=2024-05-30T19%3A30%3A26.074Z"
             alt="bateau"
             className="rounded-2xl w-full"
           />

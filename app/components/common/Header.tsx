@@ -83,7 +83,7 @@ export default function Header() {
         <div className="hidden lg:flex items-center gap-8 justify-between py-4 bg-background ">
           <nav className="flex items-center min-w-32 flex-auto ">
             <NavLink key="home" to="/">
-              <img src="/image.png" alt="home" className="px-8 h-16" />
+              <img src="/CFC.png" alt="home" className="px-8 h-16" />
             </NavLink>
             <div className="flex items-center gap-8 justify-center ml-auto mr-auto px-4">
               {routes.map((route) => (
@@ -125,7 +125,7 @@ export default function Header() {
         <nav className="lg:hidden  gap-8  pt-4 bg-background ">
           <div className="flex items-center min-w-32 justify-start ">
             <NavLink key="home" to="/">
-              <img src="/image.png" alt="home" className="px-8 h-16 j-auto" />
+              <img src="/CFC.png" alt="home" className="px-8 h-16 j-auto" />
             </NavLink>
             <div className=" ml-auto ">
               <input
