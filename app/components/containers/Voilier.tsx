@@ -1,8 +1,15 @@
-/**
- * v0 by Vercel.
- * @see https://v0.dev/t/BdsozxeOVXq
- * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
- */
+type TypeVoilier = {
+  name: string;
+  images: string[];
+  prix: string;
+  personnes: string;
+  type: string;
+  Nreviews: string;
+  Ncabine: string;
+  taille: string;
+  stars: number;
+};
+
 import {
   CarouselItem,
   CarouselContent,
@@ -14,81 +21,86 @@ import { Card } from "@/components/ui/card";
 import { SVGProps } from "react";
 import { JSX } from "react/jsx-runtime";
 
-export default function Voilier() {
+type VoilierProps = {
+  voilier?: TypeVoilier;
+};
+export default function Voilier({ voilier }: VoilierProps) {
+  const defaultVoilier: TypeVoilier = {
+    name: "bateau",
+    images: ["/vignette bateau.JPG", "/first36-nav2.jpg", "/glenan.jpeg"],
+    prix: "1600€",
+    personnes: "6",
+    type: "quillard",
+    Nreviews: "23",
+    Ncabine: "2",
+    taille: "8.95",
+    stars: 2,
+  };
+  const voilierData = voilier || defaultVoilier;
+
+  const stars = [];
+
+  for (let i = 0; i < 5; i++) {
+    if (i < voilierData.stars) {
+      stars.push(<StarIcon className="w-5 h-5 fill-primary" />);
+    } else {
+      stars.push(
+        <StarIcon className="w-5 h-5 fill-muted stroke-muted-foreground" />
+      );
+    }
+  }
   return (
-    <Card className="w-1/3 max-w-md ml-4 mt-4 ">
+    <Card className=" max-w-md ml-4 mt-4 bg-accent ">
       <div className="relative ">
         <Carousel className="rounded-t-lg container">
           <CarouselContent className="flex ">
-            <CarouselItem>
-              <img
-                alt="Product Image"
-                className="aspect-[3/2] w-full object-cover"
-                height={400}
-                src="/vignette bateau.JPG"
-                width={600}
-              />
-            </CarouselItem>
-            <CarouselItem>
-              <img
-                alt="Product Image"
-                className="aspect-[3/2] w-full object-cover"
-                height={400}
-                src="/first36-nav2.jpg"
-                width={600}
-              />
-            </CarouselItem>
-            <CarouselItem>
-              <img
-                alt="Product Image"
-                className="aspect-[3/2] w-full object-cover"
-                height={400}
-                src="/glenan.jpeg"
-                width={600}
-              />
-            </CarouselItem>
+            {voilierData.images.map((image: string) => (
+              <CarouselItem>
+                <img
+                  alt="Product Image"
+                  className="aspect-[3/2] w-full object-cover"
+                  height={400}
+                  src={image}
+                  width={600}
+                />
+              </CarouselItem>
+            ))}
           </CarouselContent>
           <CarouselPrevious className="absolute top-1/2 left-4 -translate-y-1/2 z-10 bg-white/50 hover:bg-white/80 p-2 rounded-full shadow-md transition-colors" />
           <CarouselNext className="absolute top-1/2 right-4 -translate-y-1/2 z-10 bg-white/50 hover:bg-white/80 p-2 rounded-full shadow-md transition-colors" />
         </Carousel>
         <div className="absolute top-2 right-2 bg-gray-900/80 text-white px-3 py-1 rounded-md font-medium text-sm">
-          $1500
+          {voilierData.prix}
         </div>
         <div className="absolute bottom-0 left-0 bg-yellow-500/60 text-white px-8 py-4 rounded-tr-3xl font-medium text-sm">
-          6 personnes
+          {voilierData.personnes} personnes
         </div>
       </div>
       <div className="p-4">
         <h3 className="font-bold text-xl">Bateau</h3>
-        <div className="flex items-center gap-4 mt-2">
-          <div className="flex items-center gap-1">
-            <StarIcon className="w-5 h-5 fill-primary" />
-            <StarIcon className="w-5 h-5 fill-primary" />
-            <StarIcon className="w-5 h-5 fill-primary" />
-            <StarIcon className="w-5 h-5 fill-muted stroke-muted-foreground" />
-            <StarIcon className="w-5 h-5 fill-muted stroke-muted-foreground" />
-          </div>
+        <div className="flex flex-wrap items-center gap-4 mt-2">
+          <div className="flex items-center gap-1">{stars}</div>
           <div className="text-sm text-gray-500 dark:text-gray-400">
-            (23 reviews)
+            ({voilierData.Nreviews} reviews)
           </div>
         </div>
-        <div className="flex items-center gap-4 mt-4">
+        <div className="flex flex-wrap items-center gap-4 mt-4">
           <div className="flex items-center gap-2">
             <ShirtIcon className="w-5 h-5 fill-muted" />
             <span className="text-sm text-gray-500 dark:text-gray-400">
-              2 cabines
+              {voilierData.Ncabine} cabines
             </span>
           </div>
           <div className="flex items-center gap-2">
             <RulerIcon className="w-5 h-5 fill-muted" />
             <span className="text-sm text-gray-500 dark:text-gray-400">
-              quillard
+              {voilierData.type}
             </span>
           </div>
           <div className="flex items-center gap-2">
             <WashingMachineIcon className="w-5 h-5 fill-muted" />
             <span className="text-sm text-gray-500 dark:text-gray-400">
-              8.95m
+              {voilierData.taille}m
             </span>
           </div>
         </div>
