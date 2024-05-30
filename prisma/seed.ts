@@ -3,14 +3,24 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  // await prisma.user.create({
-  //   data: {
-  //     firstName: faker.person.firstName(),
-  //     lastName: faker.person.lastName(),
-  //     username: faker.internet.userName(),
-  //     email: faker.internet.email(),
-  //   },
-  // });
+  await prisma.boat.create({
+    data: {
+      name: "Gone with the wind",
+      slug: "Gone-with-the-wind",
+      year: 2007,
+      brand: "Beneteau",
+      model: "First 36.7",
+      length: 10.87,
+      thumbnail: "/vignette bateau.JPG",
+      images: ["/vignette bateau.JPG", "/first36-nav2.jpg", "/glenan.jpeg"],
+      prix: 2000,
+      capacite: 8,
+      Nreviews: 23,
+      Ncabine: 3,
+      star: 5,
+      boatType: "quillard",
+    },
+  });
 }
 
 main()

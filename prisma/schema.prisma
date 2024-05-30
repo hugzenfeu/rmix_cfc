@@ -25,4 +25,9 @@ model Boat {
   length    Decimal  @db.Decimal(8, 4)
   thumbnail String   @db.VarChar(1024)
   images    String[] @db.VarChar(1024)
+  prix      Decimal  @db.Decimal(8, 2)
+  capacite  Int      @db.SmallInt
+  Nreviews  Int      @db.SmallInt
+  Ncabine   Int      @db.SmallInt
+  star      Int      @db.SmallInt
 }

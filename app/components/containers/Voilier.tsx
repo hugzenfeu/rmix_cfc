@@ -1,13 +1,13 @@
 type TypeVoilier = {
   name: string;
   images: string[];
-  prix: string;
-  personnes: string;
-  type: string;
+  prix: number;
+  capacite: string;
+  boatType: string;
   Nreviews: string;
   Ncabine: string;
-  taille: string;
-  stars: number;
+  length: string;
+  star: number;
 };
 
 import {
@@ -28,20 +28,20 @@ export default function Voilier({ voilier }: VoilierProps) {
   const defaultVoilier: TypeVoilier = {
     name: "bateau",
     images: ["/vignette bateau.JPG", "/first36-nav2.jpg", "/glenan.jpeg"],
-    prix: "1600€",
-    personnes: "6",
-    type: "quillard",
+    prix: 1600,
+    capacite: "6",
+    boatType: "quillard",
     Nreviews: "23",
     Ncabine: "2",
-    taille: "8.95",
-    stars: 2,
+    length: "8.95",
+    star: 2,
   };
   const voilierData = voilier || defaultVoilier;
 
   const stars = [];
 
   for (let i = 0; i < 5; i++) {
-    if (i < voilierData.stars) {
+    if (i < voilierData.star) {
       stars.push(<StarIcon className="w-5 h-5 fill-primary" />);
     } else {
       stars.push(
@@ -70,14 +70,14 @@ export default function Voilier({ voilier }: VoilierProps) {
           <CarouselNext className="absolute top-1/2 right-4 -translate-y-1/2 z-10 bg-white/50 hover:bg-white/80 p-2 rounded-full shadow-md transition-colors" />
         </Carousel>
         <div className="absolute top-2 right-2 bg-gray-900/80 text-white px-3 py-1 rounded-md font-medium text-sm">
-          {voilierData.prix}
+          {voilierData.prix}€
         </div>
         <div className="absolute bottom-0 left-0 bg-yellow-500/60 text-white px-8 py-4 rounded-tr-3xl font-medium text-sm">
-          {voilierData.personnes} personnes
+          {voilierData.capacite} personnes
         </div>
       </div>
       <div className="p-4">
-        <h3 className="font-bold text-xl">Bateau</h3>
+        <h3 className="font-bold text-xl">{voilierData.name}</h3>
         <div className="flex flex-wrap items-center gap-4 mt-2">
           <div className="flex items-center gap-1">{stars}</div>
           <div className="text-sm text-gray-500 dark:text-gray-400">
@@ -94,13 +94,13 @@ export default function Voilier({ voilier }: VoilierProps) {
           <div className="flex items-center gap-2">
             <RulerIcon className="w-5 h-5 fill-muted" />
             <span className="text-sm text-gray-500 dark:text-gray-400">
-              {voilierData.type}
+              {voilierData.boatType}
             </span>
           </div>
           <div className="flex items-center gap-2">
             <WashingMachineIcon className="w-5 h-5 fill-muted" />
             <span className="text-sm text-gray-500 dark:text-gray-400">
-              {voilierData.taille}m
+              {voilierData.length}m
             </span>
           </div>
         </div>
