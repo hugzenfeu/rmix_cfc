@@ -11,8 +11,8 @@
     "typecheck": "tsc",
     "db:gen": "prisma generate",
     "db:migrate": "prisma migrate dev",
-    "db:seed": "npm run script\"prisma db seed\" confirm",
-    "db:studio": "npm run script \"prisma studio\" confirm"
+    "db:seed": "prisma db seed",
+    "db:studio": "prisma studio"
   },
   "dependencies": {
     "@prisma/client": "^5.14.0",
@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "@remix-run/dev": "^2.9.2",
+    "@types/node": "^20.12.13",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.7.4",
@@ -48,11 +49,15 @@
     "postcss": "^8.4.38",
     "prisma": "^5.14.0",
     "tailwindcss": "^3.4.3",
-    "typescript": "^5.1.6",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5",
     "vite": "^5.1.0",
     "vite-tsconfig-paths": "^4.2.1"
   },
   "engines": {
     "node": ">=18.0.0"
+  },
+  "prisma": {
+    "seed": "node --loader ts-node/esm prisma/seed.ts"
   }
 }
