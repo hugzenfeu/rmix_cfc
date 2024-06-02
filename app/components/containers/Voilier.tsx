@@ -60,7 +60,7 @@ export default function Voilier({ voilier }: VoilierProps) {
     }
   }
   return (
-    <Card className=" max-w-md ml-4 mt-4 bg-accent ">
+    <Card className=" max-w-md mx-2 mt-4 bg-accent w-96">
       <div className="relative ">
         <Carousel className="rounded-t-lg container">
           <CarouselContent className="flex ">
@@ -70,6 +70,8 @@ export default function Voilier({ voilier }: VoilierProps) {
                   <img
                     alt="Product Image"
                     className="w-full h-full object-cover"
+                    height={400}
+                    width={600}
                     src={image}
                     loading={index > 0 ? "lazy" : "eager"}
                     onError={handleImageError}
@@ -110,7 +112,7 @@ export default function Voilier({ voilier }: VoilierProps) {
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <WashingMachineIcon className="w-5 h-5 fill-muted" />
+            <RulerIcon className="w-5 h-5 fill-muted" />
             <span className="text-sm text-gray-500 dark:text-gray-400">
               {voilierData.length}m
             </span>
