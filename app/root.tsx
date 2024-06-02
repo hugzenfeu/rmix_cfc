@@ -4,6 +4,8 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  isRouteErrorResponse,
+  useRouteError,
 } from "@remix-run/react";
 import { LinksFunction } from "@remix-run/node";
 
@@ -44,4 +46,10 @@ export default function App() {
     <Outlet />
     // </Layout>
   );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  if (isRouteErrorResponse(error)) {
+  }
 }

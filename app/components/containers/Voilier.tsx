@@ -24,6 +24,13 @@ import { JSX } from "react/jsx-runtime";
 type VoilierProps = {
   voilier?: TypeVoilier;
 };
+
+///fallback-image.jpeg
+const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+  e.currentTarget.src = "/fallback-image.jpeg";
+  e.currentTarget.onerror = null;
+};
+
 export default function Voilier({ voilier }: VoilierProps) {
   const defaultVoilier: TypeVoilier = {
     name: "bateau",
@@ -42,10 +49,13 @@ export default function Voilier({ voilier }: VoilierProps) {
 
   for (let i = 0; i < 5; i++) {
     if (i < voilierData.star) {
-      stars.push(<StarIcon className="w-5 h-5 fill-primary" />);
+      stars.push(<StarIcon key={i} className="w-5 h-5 fill-primary" />);
     } else {
       stars.push(
-        <StarIcon className="w-5 h-5 fill-muted stroke-muted-foreground" />
+        <StarIcon
+          key={i}
+          className="w-5 h-5 fill-muted stroke-muted-foreground"
+        />
       );
     }
   }
@@ -54,14 +64,15 @@ export default function Voilier({ voilier }: VoilierProps) {
       <div className="relative ">
         <Carousel className="rounded-t-lg container">
           <CarouselContent className="flex ">
-            {voilierData.images.map((image: string) => (
-              <CarouselItem>
+            {voilierData.images.map((image: string, index: number) => (
+              <CarouselItem key={index}>
                 <img
                   alt="Product Image"
                   className="aspect-[3/2] w-full object-cover"
                   height={400}
                   src={image}
                   width={600}
+                  onError={handleImageError}
                 />
               </CarouselItem>
             ))}

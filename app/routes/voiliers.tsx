@@ -17,7 +17,7 @@ export default function voiliers() {
     <div>
       <div className="flex flex-wrap justify-center mx-auto">
         {boat.map((boat: any) => (
-          <Voilier voilier={boat} />
+          <Voilier key={boat.id} voilier={boat} />
         ))}
       </div>
     </div>
