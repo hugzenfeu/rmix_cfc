@@ -66,14 +66,14 @@ export default function Voilier({ voilier }: VoilierProps) {
           <CarouselContent className="flex ">
             {voilierData.images.map((image: string, index: number) => (
               <CarouselItem key={index}>
-                <img
-                  alt="Product Image"
-                  className="aspect-[3/2] w-full object-cover"
-                  height={400}
-                  src={image}
-                  width={600}
-                  onError={handleImageError}
-                />
+                <div className=" w-full h-60 min-w-80 overflow-hidden">
+                  <img
+                    alt="Product Image"
+                    className="w-full h-full object-cover"
+                    src={image}
+                    onError={handleImageError}
+                  />
+                </div>
               </CarouselItem>
             ))}
           </CarouselContent>
