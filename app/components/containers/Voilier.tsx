@@ -71,6 +71,7 @@ export default function Voilier({ voilier }: VoilierProps) {
                     alt="Product Image"
                     className="w-full h-full object-cover"
                     src={image}
+                    loading={index > 0 ? "lazy" : "eager"}
                     onError={handleImageError}
                   />
                 </div>
