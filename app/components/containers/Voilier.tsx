@@ -6,7 +6,7 @@ import {
   Carousel,
 } from "@/components/ui/carousel";
 import { Card } from "@/components/ui/card";
-import { SVGProps } from "react";
+import { SVGProps, useEffect, useRef } from "react";
 import { JSX } from "react/jsx-runtime";
 import { Link } from "@remix-run/react";
 import { Boat } from "@prisma/client";
@@ -14,50 +14,52 @@ import { Boat } from "@prisma/client";
 type VoilierProps = {
   voilier: Boat;
 };
-
-///fallback-image.jpeg
 const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-  e.currentTarget.src = "/fallback-image.jpeg";
-  e.currentTarget.onerror = null;
+  console.log("Image error:", e.currentTarget.src);
+  e.currentTarget.onerror = null; // Prevent infinite loops
+  e.currentTarget.src =
+    "/fallback-image.jpeg?cache-bust=" + new Date().getTime(); // Cache busting
 };
 
 export default function Voilier({ voilier }: VoilierProps) {
-  console.log(voilier);
-  const stars = [];
+  const isMounted = useRef(false);
 
-  for (let i = 0; i < 5; i++) {
-    if (i < voilier.star) {
-      stars.push(<StarIcon key={i} className="w-5 h-5 fill-primary" />);
-    } else {
-      stars.push(
-        <StarIcon
-          key={i}
-          className="w-5 h-5 fill-muted stroke-muted-foreground"
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+
+  const renderImage = (image: string, index: number) => (
+    <CarouselItem key={index}>
+      <div className="w-full h-60 min-w-80 overflow-hidden">
+        <img
+          alt={`Image ${index}`}
+          className="w-full h-full object-cover"
+          height={400}
+          width={600}
+          src={image}
+          loading={index > 0 ? "lazy" : "eager"}
+          onError={(e) => {
+            console.log("Error loading image:", e.currentTarget.src);
+            if (isMounted.current) {
+              handleImageError(e);
+            }
+          }}
+          crossOrigin="anonymous"
         />
-      );
-    }
-  }
+      </div>
+    </CarouselItem>
+  );
+
   return (
     <Link to={voilier.name}>
-      <Card className=" max-w-md mx-2 mt-4 bg-accent w-96">
-        <div className="relative ">
+      <Card className="max-w-md mx-2 mt-4 bg-accent w-96">
+        <div className="relative">
           <Carousel className="rounded-t-lg container">
-            <CarouselContent className="flex ">
-              {voilier.images.map((image: string, index: number) => (
-                <CarouselItem key={index}>
-                  <div className=" w-full h-60 min-w-80 overflow-hidden">
-                    <img
-                      alt={`${index}`}
-                      className="w-full h-full object-cover"
-                      height={400}
-                      width={600}
-                      src={image}
-                      loading={index > 0 ? "lazy" : "eager"}
-                      onError={handleImageError}
-                    />
-                  </div>
-                </CarouselItem>
-              ))}
+            <CarouselContent className="flex">
+              {voilier.images.map(renderImage)}
             </CarouselContent>
             <CarouselPrevious className="absolute top-1/2 left-4 -translate-y-1/2 z-10 bg-white/50 hover:bg-white/80 p-2 rounded-full shadow-md transition-colors" />
             <CarouselNext className="absolute top-1/2 right-4 -translate-y-1/2 z-10 bg-white/50 hover:bg-white/80 p-2 rounded-full shadow-md transition-colors" />
@@ -72,7 +74,19 @@ export default function Voilier({ voilier }: VoilierProps) {
         <div className="p-4">
           <h3 className="font-bold text-xl">{voilier.name}</h3>
           <div className="flex flex-wrap items-center gap-4 mt-2">
-            <div className="flex items-center gap-1">{stars}</div>
+            {/* Render stars */}
+            <div className="flex items-center gap-1">
+              {Array.from({ length: 5 }, (_, i) => (
+                <StarIcon
+                  key={i}
+                  className={`w-5 h-5 ${
+                    i < voilier.star
+                      ? "fill-primary"
+                      : "fill-muted stroke-muted-foreground"
+                  }`}
+                />
+              ))}
+            </div>
             <div className="text-sm text-gray-500 dark:text-gray-400">
               ({voilier.Nreviews} reviews)
             </div>

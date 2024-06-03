@@ -14,7 +14,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 // Voiliers component
 export default function Voiliers() {
   const data = useLoaderData<{ boats: Boat[] }>();
-
+  //corriger le problème de type
   return (
     <div>
       <div className="flex flex-wrap justify-center items-center mx-0 md:mx-auto">
