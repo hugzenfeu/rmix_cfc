@@ -13,21 +13,39 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 // Voiliers component
 export default function Voiliers() {
-  const data = useLoaderData<{ boats: Boat[] }>();
-  //corriger le problème de type
+  const { boats } = useLoaderData<{ boats: Promise<Boat[]> }>();
+
   return (
     <div>
       <div className="flex flex-wrap justify-center items-center mx-0 md:mx-auto">
         <Suspense fallback={<div>Loading...</div>}>
-          <Await resolve={data.boats}>
-            {(boats: Boat[]) =>
-              boats.map((boat: Boat) => (
+          <Await resolve={boats}>
+            {(boatsData) => {
+              // Explicitly type boatsData as Boat[]
+              const typedBoatsData = boatsData as Boat[];
+              return typedBoatsData.map((boat: Boat) => (
                 <Voilier key={boat.id} voilier={boat} />
-              ))
-            }
+              ));
+            }}
           </Await>
         </Suspense>
       </div>
     </div>
   );
 }
+/* {(liste: Boat[]) =>
+              liste.map((boat: Boat) => (
+                <Voilier key={boat.id} voilier={boat} />
+              )) }           
+              
+              
+              
+              
+              
+              
+              
+              {{(boats:Boat[])=>boats.map((boat: Boat) => (
+                <Voilier key={boat.id} voilier={boat} />
+              )}
+         
+            }*/
