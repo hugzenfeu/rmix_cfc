@@ -4,7 +4,7 @@
  * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
  */
 
-import { Link, json } from "@remix-run/react";
+import { Await, Link, json, useLoaderData } from "@remix-run/react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
@@ -21,44 +21,103 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { SVGProps } from "react";
+import { SVGProps, Suspense, useEffect, useRef } from "react";
 import { JSX } from "react/jsx-runtime";
 import { LoaderFunctionArgs } from "@remix-run/node";
-import { prisma } from ".server/db";
-// export const loader = async ({ request }: LoaderFunctionArgs) => {
-//   const boat = await prisma.boat.findMany();
-//   return json(boat);
-// };
+import { prisma } from "~/.server/db";
+import {
+  AnchorIcon,
+  CalendarCheckIcon,
+  CalendarDaysIcon,
+  CalendarIcon,
+  CompassIcon,
+  GaugeIcon,
+  RulerIcon,
+  SailboatIcon,
+  TicketIcon,
+  WavesIcon,
+} from "~/components/svg";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { Boat } from "@prisma/client";
+import { handleImageError } from "../components/utils/handleImageError";
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const url = new URL(request.url);
+
+  const slug = url.pathname.split("/").at(-1);
+
+  const voilier = await prisma.boat.findUnique({
+    where: {
+      slug: slug,
+    },
+  });
+
+  return json(voilier);
+};
+
 export default function Component() {
+  const boat = useLoaderData<typeof loader>();
+
+  const isMounted = useRef(false);
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+  const renderImage = (image: string, index: number) => (
+    <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+      <div className="w-full h-96 min-w-80 overflow-hidden">
+        <img
+          alt={`Image ${index}`}
+          className="w-full h-full object-cover"
+          height={400}
+          width={600}
+          src={image}
+          loading={index > 0 ? "lazy" : "eager"}
+          onError={(e) => {
+            console.log("Error loading image:", e.currentTarget.src);
+            if (isMounted.current) {
+              handleImageError(e);
+            }
+          }}
+          crossOrigin="anonymous"
+        />
+      </div>
+    </CarouselItem>
+  );
+  if (!boat) {
+    return <div>l'aled</div>;
+  }
+
   return (
     <main className="flex-1">
-      <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
-        <div className="container px-4 md:px-6">
-          <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
-            <img
-              src="/fallback-image.jpeg"
-              width={800}
-              height={600}
-              alt="Sailboat"
-              className="mx-auto aspect-video overflow-hidden rounded-xl object-cover object-center sm:w-full lg:order-last"
-            />
-            <div className="flex flex-col justify-center space-y-4">
-              <div className="space-y-2">
-                <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-                  Luxury Sailboat Rental
-                </h1>
-                <p className="max-w-[600px] text-gray-500 md:text-xl dark:text-gray-400">
-                  Experience the thrill of sailing on our well-equipped and
-                  beautifully maintained sailboat. Perfect for a day on the
-                  water or a weekend getaway.
-                </p>
-              </div>
-              <Button size="lg" className="w-full max-w-[200px]">
-                Book Now
-              </Button>
-            </div>
-          </div>
-        </div>
+      <section>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Await resolve={boat}>
+            <Carousel
+              className="rounded-t-lg container"
+              opts={{
+                loop: true,
+              }}
+            >
+              <Link to={boat.name}>
+                <CarouselContent className="flex">
+                  {boat.images.map(renderImage)}
+                </CarouselContent>
+              </Link>
+              <CarouselPrevious className="absolute top-1/2 left-4 -translate-y-1/2 z-10 bg-white/50 hover:bg-white/80 p-2 rounded-full shadow-md transition-colors" />
+              <CarouselNext className="absolute top-1/2 right-4 -translate-y-1/2 z-10 bg-white/50 hover:bg-white/80 p-2 rounded-full shadow-md transition-colors" />
+            </Carousel>
+          </Await>
+        </Suspense>
       </section>
       <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800">
         <div className="container px-4 md:px-6">
@@ -282,6 +341,7 @@ export default function Component() {
           </div>
         </div>
       </section>
+
       <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800">
         <div className="container px-4 md:px-6">
           <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
@@ -292,7 +352,7 @@ export default function Component() {
               <div className="grid gap-6 py-8">
                 <div className="flex items-start gap-4">
                   <img
-                    src="/placeholder.svg"
+                    src="/fallback-image.jpeg"
                     width={300}
                     height={200}
                     alt="Sailboat 2"
@@ -317,7 +377,7 @@ export default function Component() {
                 </div>
                 <div className="flex items-start gap-4">
                   <img
-                    src="/placeholder.svg"
+                    src="/fallback-image.jpeg"
                     width={300}
                     height={200}
                     alt="Sailboat 3"
@@ -342,7 +402,7 @@ export default function Component() {
                 </div>
                 <div className="flex items-start gap-4">
                   <img
-                    src="/placeholder.svg"
+                    src="/fallback-image.jpeg"
                     width={300}
                     height={200}
                     alt="Sailboat 4"
@@ -355,234 +415,5 @@ export default function Component() {
         </div>
       </section>
     </main>
-  );
-}
-
-function AnchorIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M12 22V8" />
-      <path d="M5 12H2a10 10 0 0 0 20 0h-3" />
-      <circle cx="12" cy="5" r="3" />
-    </svg>
-  );
-}
-
-function CalendarCheckIcon(
-  props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>
-) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M8 2v4" />
-      <path d="M16 2v4" />
-      <rect width="18" height="18" x="3" y="4" rx="2" />
-      <path d="M3 10h18" />
-      <path d="m9 16 2 2 4-4" />
-    </svg>
-  );
-}
-
-function CalendarDaysIcon(
-  props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>
-) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M8 2v4" />
-      <path d="M16 2v4" />
-      <rect width="18" height="18" x="3" y="4" rx="2" />
-      <path d="M3 10h18" />
-      <path d="M8 14h.01" />
-      <path d="M12 14h.01" />
-      <path d="M16 14h.01" />
-      <path d="M8 18h.01" />
-      <path d="M12 18h.01" />
-      <path d="M16 18h.01" />
-    </svg>
-  );
-}
-
-function CalendarIcon(
-  props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>
-) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M8 2v4" />
-      <path d="M16 2v4" />
-      <rect width="18" height="18" x="3" y="4" rx="2" />
-      <path d="M3 10h18" />
-    </svg>
-  );
-}
-
-function CompassIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="12" cy="12" r="10" />
-      <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
-    </svg>
-  );
-}
-
-function GaugeIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="m12 14 4-4" />
-      <path d="M3.34 19a10 10 0 1 1 17.32 0" />
-    </svg>
-  );
-}
-
-function RulerIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0Z" />
-      <path d="m14.5 12.5 2-2" />
-      <path d="m11.5 9.5 2-2" />
-      <path d="m8.5 6.5 2-2" />
-      <path d="m17.5 15.5 2-2" />
-    </svg>
-  );
-}
-
-function SailboatIcon(
-  props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>
-) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M22 18H2a4 4 0 0 0 4 4h12a4 4 0 0 0 4-4Z" />
-      <path d="M21 14 10 2 3 14h18Z" />
-      <path d="M10 2v16" />
-    </svg>
-  );
-}
-
-function TicketIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
-      <path d="M13 5v2" />
-      <path d="M13 17v2" />
-      <path d="M13 11v2" />
-    </svg>
-  );
-}
-
-function WavesIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
-      <path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
-      <path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
-    </svg>
   );
 }

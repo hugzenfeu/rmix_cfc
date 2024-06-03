@@ -1,6 +1,6 @@
 import { json, type LoaderFunctionArgs } from "@remix-run/node";
 import Voilier from "~/components/containers/Voilier";
-import { prisma } from ".server/db";
+import { prisma } from "~/.server/db";
 import { useLoaderData, Await, defer } from "@remix-run/react";
 import { Prisma, type Boat } from "@prisma/client";
 import { Suspense } from "react";
