@@ -12,13 +12,9 @@ import { Link } from "@remix-run/react";
 import { Boat } from "@prisma/client";
 import { RulerIcon, ShirtIcon, StarIcon } from "../svg";
 import { Img } from "react-image";
+
 type VoilierProps = {
   voilier: Boat;
-};
-const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-  console.log("Image error:", e.currentTarget.src);
-  e.currentTarget.onerror = null; // Prevent infinite loops
-  e.currentTarget.src = "/fallback-image.jpeg";
 };
 export default function Voilier({ voilier }: VoilierProps) {
   const renderImage = (image: string, index: number) => (

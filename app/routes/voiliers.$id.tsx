@@ -1,10 +1,11 @@
+import type { LoaderFunctionArgs } from "@remix-run/node";
 /**
  * v0 by Vercel.
  * @see https://v0.dev/t/i420g6ohnaK
  * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
  */
 
-import { Await, Link, json, useLoaderData } from "@remix-run/react";
+import { Await, Link, useLoaderData } from "@remix-run/react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
@@ -23,8 +24,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { SVGProps, Suspense, useEffect, useRef } from "react";
 import { JSX } from "react/jsx-runtime";
-import { LoaderFunctionArgs } from "@remix-run/node";
-import { prisma } from "~/.server/db";
 import {
   AnchorIcon,
   CalendarCheckIcon,
@@ -45,20 +44,16 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Img } from "react-image";
+import { json } from "@remix-run/react";
 import { Boat } from "@prisma/client";
-import { handleImageError } from "../components/utils/handleImageError";
+import { findBoatBySlug } from "~/.server/controleurBoats";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
 
   const slug = url.pathname.split("/").at(-1);
-
-  const voilier = await prisma.boat.findUnique({
-    where: {
-      slug: slug,
-    },
-  });
-
+  if (!slug) return "error";
+  const voilier = await findBoatBySlug(slug);
   return json(voilier);
 };
 
@@ -86,24 +81,26 @@ export default function Component() {
 
   return (
     <main className="flex-1">
+      <title>{boat.name}</title>
       <section>
-        <Suspense fallback={<div>Loading...</div>}>
-          <Await resolve={boat}>
-            <Carousel
-              className="rounded-t-lg container"
-              opts={{
-                loop: true,
-              }}
-            >
-              <CarouselContent className="flex  ">
-                {boat.images.map(renderImage)}
-              </CarouselContent>
+        <div className="flex-col ">
+          <Carousel
+            className="rounded-t-lg container mt-4"
+            opts={{
+              loop: true,
+            }}
+          >
+            <CarouselContent className="flex  ">
+              {boat.images.map(renderImage)}
+            </CarouselContent>
 
-              <CarouselPrevious className="absolute top-1/2 left-4 -translate-y-1/2 z-10 bg-white/50 hover:bg-white/80 p-2 rounded-full shadow-md transition-colors" />
-              <CarouselNext className="absolute top-1/2 right-4 -translate-y-1/2 z-10 bg-white/50 hover:bg-white/80 p-2 rounded-full shadow-md transition-colors" />
-            </Carousel>
-          </Await>
-        </Suspense>
+            <CarouselPrevious className="absolute top-1/2 left-4 -translate-y-1/2 z-10 bg-white/50 hover:bg-white/80 p-2 rounded-full shadow-md transition-colors" />
+            <CarouselNext className="absolute top-1/2 right-4 -translate-y-1/2 z-10 bg-white/50 hover:bg-white/80 p-2 rounded-full shadow-md transition-colors" />
+          </Carousel>
+          <div className="flex justify-center items-center min h-20">
+            <h1 className="text-3xl font-bold">{boat.name}</h1>
+          </div>
+        </div>
       </section>
       <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800">
         <div className="container px-4 md:px-6">
@@ -156,14 +153,14 @@ export default function Component() {
             </div>
             <div>
               <h2 className="text-3xl font-bold tracking-tighter">
-                Sailboat Specifications
+                Caractéristiques du voilier
               </h2>
               <div className="grid gap-6 py-8">
                 <div className="flex items-start gap-4">
                   <RulerIcon className="w-8 h-8 text-primary" />
                   <div>
-                    <h3 className="text-xl font-semibold">Length</h3>
-                    <p className="text-gray-500 dark:text-gray-400">35 feet</p>
+                    <h3 className="text-xl font-semibold">Longueur</h3>
+                    <p className="text-gray-500 dark:text-gray-400">{`${boat.length}m`}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
@@ -176,9 +173,9 @@ export default function Component() {
                 <div className="flex items-start gap-4">
                   <TicketIcon className="w-8 h-8 text-primary" />
                   <div>
-                    <h3 className="text-xl font-semibold">Capacity</h3>
+                    <h3 className="text-xl font-semibold">Capacité</h3>
                     <p className="text-gray-500 dark:text-gray-400">
-                      6 passengers
+                      {boat.capacite} passagers
                     </p>
                   </div>
                 </div>
@@ -330,71 +327,69 @@ export default function Component() {
 
       <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800">
         <div className="container px-4 md:px-6">
-          <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
-            <div>
-              <h2 className="text-3xl font-bold tracking-tighter">
-                Other Sailboat Listings
-              </h2>
-              <div className="grid gap-6 py-8">
-                <div className="flex items-start gap-4">
-                  <img
-                    src="/fallback-image.jpeg"
-                    width={300}
-                    height={200}
-                    alt="Sailboat 2"
-                    className="rounded-lg object-cover w-24 h-24"
-                  />
-                  <div>
-                    <h3 className="text-xl font-semibold">
-                      Luxury Yacht with Jacuzzi
-                    </h3>
-                    <p className="text-gray-500 dark:text-gray-400">
-                      Experience the ultimate in luxury sailing with our
-                      spacious yacht featuring a private jacuzzi.
-                    </p>
-                    <div className="flex items-center gap-2 text-sm font-medium">
-                      <CalendarDaysIcon className="w-4 h-4 text-primary" />
-                      <span>$800 per day</span>
-                    </div>
-                    <Button variant="link" className="mt-2">
-                      View Listing
-                    </Button>
+          <div className="flex-col justify-around gap-16">
+            <h2 className="text-3xl font-bold tracking-tighter">
+              Other Sailboat Listings
+            </h2>
+            <div className="flex">
+              <div className="flex items-start gap-4">
+                <img
+                  src="/fallback-image.jpeg"
+                  width={300}
+                  height={200}
+                  alt="Sailboat 2"
+                  className="rounded-lg object-cover w-24 h-24"
+                />
+                <div>
+                  <h3 className="text-xl font-semibold">
+                    Luxury Yacht with Jacuzzi
+                  </h3>
+                  <p className="text-gray-500 dark:text-gray-400">
+                    Experience the ultimate in luxury sailing with our spacious
+                    yacht featuring a private jacuzzi.
+                  </p>
+                  <div className="flex items-center gap-2 text-sm font-medium">
+                    <CalendarDaysIcon className="w-4 h-4 text-primary" />
+                    <span>$800 per day</span>
                   </div>
+                  <Button variant="link" className="mt-2">
+                    View Listing
+                  </Button>
                 </div>
-                <div className="flex items-start gap-4">
-                  <img
-                    src="/fallback-image.jpeg"
-                    width={300}
-                    height={200}
-                    alt="Sailboat 3"
-                    className="rounded-lg object-cover w-24 h-24"
-                  />
-                  <div>
-                    <h3 className="text-xl font-semibold">
-                      Family-Friendly Catamaran
-                    </h3>
-                    <p className="text-gray-500 dark:text-gray-400">
-                      Ideal for families, our spacious catamaran offers ample
-                      room and stability for a comfortable sailing experience.
-                    </p>
-                    <div className="flex items-center gap-2 text-sm font-medium">
-                      <CalendarDaysIcon className="w-4 h-4 text-primary" />
-                      <span>$600 per day</span>
-                    </div>
-                    <Button variant="link" className="mt-2">
-                      View Listing
-                    </Button>
+              </div>
+              <div className="flex items-start gap-4">
+                <img
+                  src="/fallback-image.jpeg"
+                  width={300}
+                  height={200}
+                  alt="Sailboat 3"
+                  className="rounded-lg object-cover w-24 h-24"
+                />
+                <div>
+                  <h3 className="text-xl font-semibold">
+                    Family-Friendly Catamaran
+                  </h3>
+                  <p className="text-gray-500 dark:text-gray-400">
+                    Ideal for families, our spacious catamaran offers ample room
+                    and stability for a comfortable sailing experience.
+                  </p>
+                  <div className="flex items-center gap-2 text-sm font-medium">
+                    <CalendarDaysIcon className="w-4 h-4 text-primary" />
+                    <span>$600 per day</span>
                   </div>
+                  <Button variant="link" className="mt-2">
+                    View Listing
+                  </Button>
                 </div>
-                <div className="flex items-start gap-4">
-                  <img
-                    src="/fallback-image.jpeg"
-                    width={300}
-                    height={200}
-                    alt="Sailboat 4"
-                    className="rounded-lg object-cover w-24 h-24"
-                  />
-                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <img
+                  src="/fallback-image.jpeg"
+                  width={300}
+                  height={200}
+                  alt="Sailboat 4"
+                  className="rounded-lg object-cover w-24 h-24"
+                />
               </div>
             </div>
           </div>

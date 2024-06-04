@@ -1,13 +1,13 @@
 import { json, type LoaderFunctionArgs, defer } from "@remix-run/node";
 import Voilier from "~/components/containers/Voilier";
-import { prisma } from "~/.server/db";
+import { findAllBoats } from "~/.server/controleurBoats";
 import { useLoaderData, Await } from "@remix-run/react";
 import { Prisma, type Boat } from "@prisma/client";
 import { Suspense } from "react";
 
 // Loader function to fetch boat data
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const boatsPromise = prisma.boat.findMany();
+  const boatsPromise = findAllBoats();
   return defer({ boatsPromise: await boatsPromise });
 };
 
