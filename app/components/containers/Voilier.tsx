@@ -5,13 +5,13 @@ import {
   CarouselNext,
   Carousel,
 } from "@/components/ui/carousel";
+
 import { Card } from "@/components/ui/card";
-import { useEffect, useRef } from "react";
-import { JSX } from "react/jsx-runtime";
+
 import { Link } from "@remix-run/react";
 import { Boat } from "@prisma/client";
 import { RulerIcon, ShirtIcon, StarIcon } from "../svg";
-
+import { Img } from "react-image";
 type VoilierProps = {
   voilier: Boat;
 };
@@ -21,31 +21,16 @@ const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
   e.currentTarget.src = "/fallback-image.jpeg";
 };
 export default function Voilier({ voilier }: VoilierProps) {
-  const isMounted = useRef(false);
-
-  useEffect(() => {
-    isMounted.current = true;
-    return () => {
-      isMounted.current = false;
-    };
-  }, []);
-
   const renderImage = (image: string, index: number) => (
     <CarouselItem key={index}>
       <div className="w-full h-60 min-w-80 overflow-hidden">
-        <img
+        <Img
           alt={`Image ${index}`}
           className="w-full h-full object-cover"
           height={400}
           width={600}
-          src={image}
           loading={index > 0 ? "lazy" : "eager"}
-          onError={(e) => {
-            console.log("Error loading image:", e.currentTarget.src);
-            if (isMounted.current) {
-              handleImageError(e);
-            }
-          }}
+          src={[image, "/fallback-image.jpeg"]}
           crossOrigin="anonymous"
         />
       </div>

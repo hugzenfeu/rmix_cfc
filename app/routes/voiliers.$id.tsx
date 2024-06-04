@@ -44,6 +44,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { Img } from "react-image";
 import { Boat } from "@prisma/client";
 import { handleImageError } from "../components/utils/handleImageError";
 
@@ -64,30 +65,16 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export default function Component() {
   const boat = useLoaderData<typeof loader>();
 
-  const isMounted = useRef(false);
-
-  useEffect(() => {
-    isMounted.current = true;
-    return () => {
-      isMounted.current = false;
-    };
-  }, []);
   const renderImage = (image: string, index: number) => (
-    <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+    <CarouselItem key={index} className="mx-auto md:basis-1/2 lg:basis-1/3">
       <div className="w-full h-96 min-w-80 overflow-hidden">
-        <img
+        <Img
           alt={`Image ${index}`}
           className="w-full h-full object-cover"
           height={400}
           width={600}
-          src={image}
+          src={[image, "/fallback-image.jpeg"]}
           loading={index > 0 ? "lazy" : "eager"}
-          onError={(e) => {
-            console.log("Error loading image:", e.currentTarget.src);
-            if (isMounted.current) {
-              handleImageError(e);
-            }
-          }}
           crossOrigin="anonymous"
         />
       </div>
@@ -108,11 +95,10 @@ export default function Component() {
                 loop: true,
               }}
             >
-              <Link to={boat.name}>
-                <CarouselContent className="flex">
-                  {boat.images.map(renderImage)}
-                </CarouselContent>
-              </Link>
+              <CarouselContent className="flex  ">
+                {boat.images.map(renderImage)}
+              </CarouselContent>
+
               <CarouselPrevious className="absolute top-1/2 left-4 -translate-y-1/2 z-10 bg-white/50 hover:bg-white/80 p-2 rounded-full shadow-md transition-colors" />
               <CarouselNext className="absolute top-1/2 right-4 -translate-y-1/2 z-10 bg-white/50 hover:bg-white/80 p-2 rounded-full shadow-md transition-colors" />
             </Carousel>
