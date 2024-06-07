@@ -8,14 +8,22 @@ import {
   useRouteError,
 } from "@remix-run/react";
 import { LinksFunction } from "@remix-run/node";
-
+// import sprite from "app/components/icons/icon.svg?url";
+import iconHref from "app/components/icons/icon.svg?url";
 import stylesheet from "~/globals.css?url";
 
 import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
+import { Icon } from "app/components/utils/Icon";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
+  {
+    rel: "preload",
+    href: iconHref,
+    as: "image",
+    type: "image/svg+xml",
+  },
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {

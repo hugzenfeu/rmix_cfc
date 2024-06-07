@@ -10,7 +10,8 @@ import { Card } from "@/components/ui/card";
 
 import { Link } from "@remix-run/react";
 import { Boat } from "@prisma/client";
-import { RulerIcon, ShirtIcon, StarIcon } from "../svg";
+
+import { Icon } from "app/components/utils/Icon";
 import { Img } from "react-image";
 
 type VoilierProps = {
@@ -66,12 +67,13 @@ export default function Voilier({ voilier }: VoilierProps) {
             {/* Render stars */}
             <div className="flex items-center gap-1">
               {Array.from({ length: 5 }, (_, i) => (
-                <StarIcon
+                <Icon
+                  name="StarIcon"
                   key={i}
                   className={`w-5 h-5 ${
                     i < voilier.star
                       ? "fill-primary"
-                      : "fill-muted stroke-muted-foreground"
+                      : "fill-muted stroke-muted-foreground "
                   }`}
                 />
               ))}
@@ -82,19 +84,20 @@ export default function Voilier({ voilier }: VoilierProps) {
           </div>
           <div className="flex flex-wrap items-center gap-4 mt-4">
             <div className="flex items-center gap-2">
-              <ShirtIcon className="w-5 h-5 fill-muted" />
+              {/* <Bed /> */}
+              <Icon name="BedSvgrepoCom" className="w-5 h-5 fill-muted " />
               <span className="text-sm text-gray-500 dark:text-gray-400">
                 {voilier.Ncabine} cabines
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <RulerIcon className="w-5 h-5 fill-muted" />
+              <Icon name="Ruler" className="w-5 h-5 fill-muted" />
               <span className="text-sm text-gray-500 dark:text-gray-400">
                 {voilier.boatType}
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <RulerIcon className="w-5 h-5 fill-muted" />
+              <Icon name="Ruler" className="w-5 h-5 fill-muted" />
               <span className="text-sm text-gray-500 dark:text-gray-400">
                 {`${voilier.length}`}m
               </span>

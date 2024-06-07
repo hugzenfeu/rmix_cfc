@@ -5,7 +5,7 @@ import type { LoaderFunctionArgs } from "@remix-run/node";
  * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
  */
 
-import { Await, Link, useLoaderData } from "@remix-run/react";
+import { Await, Link, defer, useLoaderData } from "@remix-run/react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
@@ -24,18 +24,18 @@ import {
 import { Input } from "@/components/ui/input";
 import { SVGProps, Suspense, useEffect, useRef } from "react";
 import { JSX } from "react/jsx-runtime";
-import {
-  AnchorIcon,
-  CalendarCheckIcon,
-  CalendarDaysIcon,
-  CalendarIcon,
-  CompassIcon,
-  GaugeIcon,
-  RulerIcon,
-  SailboatIcon,
-  TicketIcon,
-  WavesIcon,
-} from "~/components/svg";
+// import {
+//   AnchorIcon,
+//   CalendarCheckIcon,
+//   CalendarDaysIcon,
+//   CalendarIcon,
+//   CompassIcon,
+//   GaugeIcon,
+//   RulerIcon,
+//   SailboatIcon,
+//   TicketIcon,
+//   WavesIcon,
+// } from "svg-icons/input/svg";
 import {
   Carousel,
   CarouselContent,
@@ -46,19 +46,22 @@ import {
 import { Img } from "react-image";
 import { json } from "@remix-run/react";
 import { Boat } from "@prisma/client";
-import { findBoatBySlug } from "~/.server/controleurBoats";
+import { findBoatBySlug, findNBoats } from "~/.server/controleurBoats";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
-
+  const autresAnnoncePromises = findNBoats(3);
   const slug = url.pathname.split("/").at(-1);
-  if (!slug) return "error";
-  const voilier = await findBoatBySlug(slug);
-  return json(voilier);
+
+  const boatPromise = findBoatBySlug(slug);
+  return defer({
+    boatPromise: await boatPromise,
+    autresAnnoncePromises: autresAnnoncePromises,
+  });
 };
 
 export default function Component() {
-  const boat = useLoaderData<typeof loader>();
+  const { boatPromise, autreAnnoncePromises } = useLoaderData<typeof loader>();
 
   const renderImage = (image: string, index: number) => (
     <CarouselItem key={index} className="mx-auto md:basis-1/2 lg:basis-1/3">
@@ -75,13 +78,13 @@ export default function Component() {
       </div>
     </CarouselItem>
   );
-  if (!boat) {
+  if (boatPromise == "error" || !boatPromise) {
     return <div>l'aled</div>;
   }
 
   return (
     <main className="flex-1">
-      <title>{boat.name}</title>
+      <title>{boatPromise.name}</title>
       <section>
         <div className="flex-col ">
           <Carousel
@@ -91,14 +94,14 @@ export default function Component() {
             }}
           >
             <CarouselContent className="flex  ">
-              {boat.images.map(renderImage)}
+              {boatPromise.images.map(renderImage)}
             </CarouselContent>
 
             <CarouselPrevious className="absolute top-1/2 left-4 -translate-y-1/2 z-10 bg-white/50 hover:bg-white/80 p-2 rounded-full shadow-md transition-colors" />
             <CarouselNext className="absolute top-1/2 right-4 -translate-y-1/2 z-10 bg-white/50 hover:bg-white/80 p-2 rounded-full shadow-md transition-colors" />
           </Carousel>
           <div className="flex justify-center items-center min h-20">
-            <h1 className="text-3xl font-bold">{boat.name}</h1>
+            <h1 className="text-3xl font-bold">{boatPromise.name}</h1>
           </div>
         </div>
       </section>
@@ -160,7 +163,7 @@ export default function Component() {
                   <RulerIcon className="w-8 h-8 text-primary" />
                   <div>
                     <h3 className="text-xl font-semibold">Longueur</h3>
-                    <p className="text-gray-500 dark:text-gray-400">{`${boat.length}m`}</p>
+                    <p className="text-gray-500 dark:text-gray-400">{`${boatPromise.length}m`}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
@@ -175,7 +178,7 @@ export default function Component() {
                   <div>
                     <h3 className="text-xl font-semibold">Capacité</h3>
                     <p className="text-gray-500 dark:text-gray-400">
-                      {boat.capacite} passagers
+                      {boatPromise.capacite} passagers
                     </p>
                   </div>
                 </div>
