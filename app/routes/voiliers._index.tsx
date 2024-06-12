@@ -6,9 +6,9 @@ import { Prisma, type Boat } from "@prisma/client";
 import { Suspense } from "react";
 
 // Loader function to fetch boat data
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader = async () => {
   const boatsPromise = findAllBoats();
-  return defer({ boatsPromise: await boatsPromise });
+  return defer({ boatsPromise: boatsPromise });
 };
 
 // Voiliers component
@@ -22,7 +22,7 @@ export default function Voiliers() {
             {(boatsData) => {
               // Explicitly type boatsData as Boat[]
               console.log(boatsData);
-              return boatsData.map((boat: Boat) => (
+              return boatsData.map((boat) => (
                 <Voilier key={boat.id} voilier={boat} />
               ));
             }}

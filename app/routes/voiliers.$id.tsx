@@ -46,7 +46,11 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     boats.map((boat) => ({
       ...boat,
       length: boat.length.toString(), // Convert Decimal to string
-      prix: boat.prix.toString(), // Convert Decimal to string
+      prix: boat.prix.toString(),
+      prixWeekend: boat.prixWeekend.toString(),
+      prixJour: boat.prixJour.toString(),
+      caution: boat.caution.toString(),
+      fuel: boat.fuel.toString(), // Convert Decimal to string
     }))
   );
 
@@ -78,12 +82,9 @@ export default function Component() {
       </div>
     </CarouselItem>
   );
-  if (!boat) {
-    return <div>l'aled</div>;
-  }
 
   return (
-    <main className="flex-1">
+    <main className="flex-1 bg-background">
       <title>{boat.name}</title>
       <section>
         <div className="flex-col ">
@@ -110,19 +111,14 @@ export default function Component() {
           <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
             <div>
               <h2 className="text-3xl font-bold tracking-tighter">
-                Sailboat Features
+                Description du bateau
               </h2>
               <div className="grid gap-6 py-8">
                 <div className="flex items-start gap-4">
                   <Icon name="CompassIcon" className="w-8 h-8 text-primary" />
                   <div>
-                    <h3 className="text-xl font-semibold">
-                      Fully Equipped Navigation
-                    </h3>
                     <p className="text-gray-500 dark:text-gray-400">
-                      Our sailboat is equipped with state-of-the-art navigation
-                      systems, including GPS, chartplotter, and VHF, ensuring a
-                      safe and enjoyable sailing experience.
+                      {boat.description}
                     </p>
                   </div>
                 </div>
@@ -169,8 +165,10 @@ export default function Component() {
                 <div className="flex items-start gap-4">
                   <Icon name="GaugeIcon" className="w-8 h-8 text-primary" />
                   <div>
-                    <h3 className="text-xl font-semibold">Top Speed</h3>
-                    <p className="text-gray-500 dark:text-gray-400">15 knots</p>
+                    <h3 className="text-xl font-semibold">Vitesse de coque</h3>
+                    <p className="text-gray-500 dark:text-gray-400">
+                      {boat.speed} kts
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
@@ -185,9 +183,11 @@ export default function Component() {
                 <div className="flex items-start gap-4">
                   <Icon name="AnchorIcon" className="w-8 h-8 text-primary" />
                   <div>
-                    <h3 className="text-xl font-semibold">Fuel Capacity</h3>
+                    <h3 className="text-xl font-semibold">
+                      Capacité du réservoir
+                    </h3>
                     <p className="text-gray-500 dark:text-gray-400">
-                      50 gallons
+                      {boat.fuel} litres
                     </p>
                   </div>
                 </div>
@@ -201,7 +201,7 @@ export default function Component() {
           <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
             <div>
               <h2 className="text-3xl font-bold tracking-tighter">
-                Boat Rental Pricing
+                Prix de location
               </h2>
               <div className="grid gap-6 py-8">
                 <div className="flex items-start gap-4">
@@ -212,7 +212,7 @@ export default function Component() {
                   <div>
                     <h3 className="text-xl font-semibold">Daily Rate</h3>
                     <p className="text-gray-500 dark:text-gray-400">
-                      $500 per day
+                      {boat.prixJour}€ par jours
                     </p>
                   </div>
                 </div>
@@ -224,7 +224,7 @@ export default function Component() {
                   <div>
                     <h3 className="text-xl font-semibold">Weekend Rate</h3>
                     <p className="text-gray-500 dark:text-gray-400">
-                      $1,200 for 2 days
+                      {boat.prixWeekend}€ pour le Weekend
                     </p>
                   </div>
                 </div>
@@ -233,7 +233,7 @@ export default function Component() {
                   <div>
                     <h3 className="text-xl font-semibold">Weekly Rate</h3>
                     <p className="text-gray-500 dark:text-gray-400">
-                      $2,500 for 7 days
+                      {boat.prix}€ pour la semaine
                     </p>
                   </div>
                 </div>
@@ -242,7 +242,7 @@ export default function Component() {
                   <div>
                     <h3 className="text-xl font-semibold">Deposit</h3>
                     <p className="text-gray-500 dark:text-gray-400">
-                      $1,000 refundable security deposit
+                      {boat.caution}€ de caution
                     </p>
                   </div>
                 </div>

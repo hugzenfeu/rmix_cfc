@@ -13,11 +13,38 @@ import { Boat } from "@prisma/client";
 
 import { Icon } from "app/components/utils/Icon";
 import { Img } from "react-image";
+import { useEffect, useRef, useState } from "react";
 
 type VoilierProps = {
-  voilier: Boat;
+  voilier: {
+    id: number;
+    slug: string;
+    name: string;
+    year: number;
+    boatType: string;
+    brand: string;
+    model: string;
+    length: string;
+    thumbnail: string;
+    images: string[];
+    prix: string;
+    capacite: number;
+    Nreviews: number;
+    Ncabine: number;
+    star: number;
+  };
 };
 export default function Voilier({ voilier }: VoilierProps) {
+  // pas sur de ce truc je comprends pas vraiement cette partie
+  const [images, setImages] = useState(voilier.images);
+  const isMounted = useRef(false);
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
   const renderImage = (image: string, index: number) => (
     <CarouselItem key={index}>
       <div className="w-full h-60 min-w-80 overflow-hidden">
@@ -45,7 +72,7 @@ export default function Voilier({ voilier }: VoilierProps) {
         >
           <Link to={voilier.slug}>
             <CarouselContent className="flex">
-              {voilier.images.map(renderImage)}
+              {images.map((image, index) => renderImage(image, index))}
             </CarouselContent>
           </Link>
           <CarouselPrevious className="absolute top-1/2 left-4 -translate-y-1/2 z-10 bg-white/50 hover:bg-white/80 p-2 rounded-full shadow-md transition-colors" />

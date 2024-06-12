@@ -8,8 +8,8 @@ import {
   useRouteError,
 } from "@remix-run/react";
 import { LinksFunction } from "@remix-run/node";
-// import sprite from "app/components/icons/icon.svg?url";
 import iconHref from "app/components/icons/icon.svg?url";
+//import iconHref from "app/components/icons/icon.svg";
 import stylesheet from "~/globals.css?url";
 
 import Header from "./components/common/Header";
@@ -21,7 +21,7 @@ export const links: LinksFunction = () => [
   {
     rel: "preload",
     href: iconHref,
-    as: "image",
+    as: "fetch",
     type: "image/svg+xml",
   },
 ];
