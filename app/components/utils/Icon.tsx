@@ -1,6 +1,6 @@
 import { type SVGProps } from "react";
 import spriteHref from "app/components/icons/icon.svg?url";
-import { type IconName } from "app/components/icons/types.ts";
+import { type IconName } from "app/components/icons/types";
 
 export function Icon({
   name,

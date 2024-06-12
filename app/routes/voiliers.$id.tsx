@@ -5,7 +5,7 @@ import type { LoaderFunctionArgs } from "@remix-run/node";
  * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
  */
 
-import { Await, Link, useLoaderData } from "@remix-run/react";
+import { Await, Link, defer, useLoaderData } from "@remix-run/react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
@@ -35,19 +35,33 @@ import {
 import { Img } from "react-image";
 import { json } from "@remix-run/react";
 import { Boat } from "@prisma/client";
-import { findBoatBySlug } from "~/.server/controleurBoats";
+import { findBoatBySlug, findNBoats } from "~/.server/controleurBoats";
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const url = new URL(request.url);
+export const loader = async ({ params }: LoaderFunctionArgs) => {
+  const slug = params.id; // Assuming `id` is the dynamic parameter in your route
+  if (!slug) {
+    throw new Response("Boat not found", { status: 404 });
+  }
+  const autresAnnoncesPromise = findNBoats(3).then((boats) =>
+    boats.map((boat) => ({
+      ...boat,
+      length: boat.length.toString(), // Convert Decimal to string
+      prix: boat.prix.toString(), // Convert Decimal to string
+    }))
+  );
 
-  const slug = url.pathname.split("/").at(-1);
-  if (!slug) return "error";
-  const voilier = await findBoatBySlug(slug);
-  return json(voilier);
+  const boat = await findBoatBySlug(slug);
+  if (!boat) {
+    throw new Response("Boat not found", { status: 404 });
+  }
+  return defer({
+    boat,
+    autresAnnonces: autresAnnoncesPromise,
+  });
 };
 
 export default function Component() {
-  const boat = useLoaderData<typeof loader>();
+  const { boat, autresAnnonces } = useLoaderData<typeof loader>();
 
   const renderImage = (image: string, index: number) => (
     <CarouselItem key={index} className="mx-auto md:basis-1/2 lg:basis-1/3">
@@ -146,7 +160,7 @@ export default function Component() {
               </h2>
               <div className="grid gap-6 py-8">
                 <div className="flex items-start gap-4">
-                  <Icon name="RulerIcon" className="w-8 h-8 text-primary" />
+                  <Icon name="Ruler" className="w-8 h-8 text-primary" />
                   <div>
                     <h3 className="text-xl font-semibold">Longueur</h3>
                     <p className="text-gray-500 dark:text-gray-400">{`${boat.length}m`}</p>
