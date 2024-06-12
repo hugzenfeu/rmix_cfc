@@ -95,13 +95,9 @@ export default function Voilier({ voilier }: VoilierProps) {
             <div className="flex items-center gap-1">
               {Array.from({ length: 5 }, (_, i) => (
                 <Icon
-                  name="StarIcon"
+                  name={i < voilier.star ? "StarIconFill" : "StarIcon"}
                   key={i}
-                  className={`w-5 h-5 ${
-                    i < voilier.star
-                      ? "fill-primary"
-                      : "fill-muted stroke-muted-foreground "
-                  }`}
+                  className="w-5 h-5 fill-primary"
                 />
               ))}
             </div>

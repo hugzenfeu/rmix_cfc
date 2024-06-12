@@ -3,6 +3,7 @@
 export type IconName =
   | "WavesIcon"
   | "TicketIcon"
+  | "StarIconFill"
   | "StarIcon"
   | "ShirtIcon"
   | "SailboatIcon"
@@ -20,6 +21,7 @@ export type IconName =
 export const iconNames = [
   "WavesIcon",
   "TicketIcon",
+  "StarIconFill",
   "StarIcon",
   "ShirtIcon",
   "SailboatIcon",

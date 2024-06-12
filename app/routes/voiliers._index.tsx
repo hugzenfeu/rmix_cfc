@@ -16,7 +16,7 @@ export default function Voiliers() {
   const { boatsPromise } = useLoaderData<typeof loader>();
   return (
     <div>
-      <div className="flex flex-wrap justify-center items-center mx-0 md:mx-auto">
+      <div className="flex flex-wrap justify-center items-center mx-0 md:mx-auto min-h-[800px]">
         <Suspense fallback={<div>Loading...</div>}>
           <Await resolve={boatsPromise}>
             {(boatsData) => {

@@ -14,6 +14,7 @@ export function Icon({
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       stroke="currentColor"
+      fill="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"

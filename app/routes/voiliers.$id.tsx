@@ -103,7 +103,9 @@ export default function Component() {
             <CarouselNext className="absolute top-1/2 right-4 -translate-y-1/2 z-10 bg-white/50 hover:bg-white/80 p-2 rounded-full shadow-md transition-colors" />
           </Carousel>
           <div className="flex justify-center items-center min h-20">
-            <h1 className="text-3xl font-bold">{boat.name}</h1>
+            <h1 className="text-3xl font-bold">
+              {boat.brand} {boat.model} - {boat.name}
+            </h1>
           </div>
         </div>
       </section>
@@ -251,11 +253,11 @@ export default function Component() {
             </div>
             <div>
               <h2 className="text-3xl font-bold tracking-tighter">
-                Book Your Sailing Adventure
+                Réservez votre aventure en voilier
               </h2>
               <form className="grid gap-4 py-8">
                 <div className="grid gap-2">
-                  <Label htmlFor="start-date">Start Date</Label>
+                  <Label htmlFor="start-date">Début du séjour</Label>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
@@ -263,7 +265,7 @@ export default function Component() {
                         className="flex-col items-start w-full h-auto"
                       >
                         <span className="font-semibold uppercase text-[0.65rem]">
-                          Check in
+                          Arrivée
                         </span>
                         <span className="font-normal">4/2/2024</span>
                       </Button>
@@ -274,7 +276,7 @@ export default function Component() {
                   </Popover>
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="end-date">End Date</Label>
+                  <Label htmlFor="end-date">Fin du séjour</Label>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
@@ -282,7 +284,7 @@ export default function Component() {
                         className="flex-col items-start w-full h-auto"
                       >
                         <span className="font-semibold uppercase text-[0.65rem]">
-                          Check out
+                          Départ
                         </span>
                         <span className="font-normal">10/2/2024</span>
                       </Button>

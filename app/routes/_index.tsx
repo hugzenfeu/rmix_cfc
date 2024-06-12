@@ -1,5 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
 import { Button } from "@/components/ui/button";
+import { NavLink } from "@remix-run/react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -54,9 +55,12 @@ export default function Index() {
           <p className="mb-8 text-lg font-semibold text-primary">
             Pour découvrir notre flotte c’est ici:
           </p>
-          <Button className="rounded-md px-6 py-2 bg-primary text-secondary hover:bg-primary-dark">
+          <NavLink
+            to={"/voiliers"}
+            className="rounded-md px-6 py-2 bg-primary text-secondary hover:bg-primary-dark"
+          >
             Nos voiliers
-          </Button>
+          </NavLink>
         </div>
         <div className="w-full lg:w-1/2 p-4">
           <img
