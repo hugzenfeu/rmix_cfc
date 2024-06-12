@@ -42,17 +42,18 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
   if (!slug) {
     throw new Response("Boat not found", { status: 404 });
   }
-  const autresAnnoncesPromise = findNBoats(3).then((boats) =>
-    boats.map((boat) => ({
-      ...boat,
-      length: boat.length.toString(), // Convert Decimal to string
-      prix: boat.prix.toString(),
-      prixWeekend: boat.prixWeekend.toString(),
-      prixJour: boat.prixJour.toString(),
-      caution: boat.caution.toString(),
-      fuel: boat.fuel.toString(), // Convert Decimal to string
-    }))
-  );
+  const autresAnnoncesPromise = findNBoats(3);
+  //.then((boats) =>
+  //   boats.map((boat) => ({
+  //     ...boat,
+  //     length: boat.length.toString(), // Convert Decimal to string
+  //     prix: boat.prix.toString(),
+  //     prixWeekend: boat.prixWeekend.toString(),
+  //     prixJour: boat.prixJour.toString(),
+  //     caution: boat.caution.toString(),
+  //     fuel: boat.fuel.toString(),
+  //   }))
+  // );
 
   const boat = await findBoatBySlug(slug);
   if (!boat) {
@@ -167,7 +168,7 @@ export default function Component() {
                   <div>
                     <h3 className="text-xl font-semibold">Vitesse de coque</h3>
                     <p className="text-gray-500 dark:text-gray-400">
-                      {boat.speed} kts
+                      {`${boat.speed}`} kts
                     </p>
                   </div>
                 </div>
@@ -176,7 +177,7 @@ export default function Component() {
                   <div>
                     <h3 className="text-xl font-semibold">Capacité</h3>
                     <p className="text-gray-500 dark:text-gray-400">
-                      {boat.capacite} passagers
+                      {`${boat.capacite}`} passagers
                     </p>
                   </div>
                 </div>
@@ -187,7 +188,7 @@ export default function Component() {
                       Capacité du réservoir
                     </h3>
                     <p className="text-gray-500 dark:text-gray-400">
-                      {boat.fuel} litres
+                      {`${boat.fuel}`} litres
                     </p>
                   </div>
                 </div>
@@ -212,7 +213,7 @@ export default function Component() {
                   <div>
                     <h3 className="text-xl font-semibold">Daily Rate</h3>
                     <p className="text-gray-500 dark:text-gray-400">
-                      {boat.prixJour}€ par jours
+                      {`${boat.prixJour}`}€ par jours
                     </p>
                   </div>
                 </div>
@@ -224,7 +225,7 @@ export default function Component() {
                   <div>
                     <h3 className="text-xl font-semibold">Weekend Rate</h3>
                     <p className="text-gray-500 dark:text-gray-400">
-                      {boat.prixWeekend}€ pour le Weekend
+                      {`${boat.prixWeekend}`}€ pour le Weekend
                     </p>
                   </div>
                 </div>
@@ -233,7 +234,7 @@ export default function Component() {
                   <div>
                     <h3 className="text-xl font-semibold">Weekly Rate</h3>
                     <p className="text-gray-500 dark:text-gray-400">
-                      {boat.prix}€ pour la semaine
+                      {`${boat.prix}`}€ pour la semaine
                     </p>
                   </div>
                 </div>
@@ -242,7 +243,7 @@ export default function Component() {
                   <div>
                     <h3 className="text-xl font-semibold">Deposit</h3>
                     <p className="text-gray-500 dark:text-gray-400">
-                      {boat.caution}€ de caution
+                      {`${boat.caution}`}€ de caution
                     </p>
                   </div>
                 </div>
@@ -292,24 +293,23 @@ export default function Component() {
                   </Popover>
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="guests">Number of Guests</Label>
+                  <Label htmlFor="guests">Nombre de passagers</Label>
                   <Select defaultValue="2">
-                    <SelectTrigger className="w-24">
+                    <SelectTrigger className="w-32">
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="1">1 guest</SelectItem>
-                      <SelectItem value="2">2 guests</SelectItem>
-                      <SelectItem value="3">3 guests</SelectItem>
-                      <SelectItem value="4">4 guests</SelectItem>
-                      <SelectItem value="5">5 guests</SelectItem>
-                      <SelectItem value="6">6 guests</SelectItem>
+                      {[...Array(boat.capacite)].map((_, i) => (
+                        <SelectItem key={i} value={(i + 1).toString()}>
+                          {i + 1} passager{i + 1 !== 1 ? "s" : ""}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="name">Name</Label>
-                  <Input id="name" type="text" placeholder="John Doe" />
+                  <Label htmlFor="nom">Nom</Label>
+                  <Input id="nom" type="text" placeholder="John Doe" />
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="email">Email</Label>
@@ -320,14 +320,10 @@ export default function Component() {
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="phone">Phone</Label>
-                  <Input
-                    id="phone"
-                    type="tel"
-                    placeholder="+1 (123) 456-7890"
-                  />
+                  <Label htmlFor="telephone">Telephone</Label>
+                  <Input id="phone" type="tel" placeholder="05 05 05 05 05" />
                 </div>
-                <Button size="lg">Submit Inquiry</Button>
+                <Button size="lg">Demander un devis</Button>
               </form>
             </div>
           </div>

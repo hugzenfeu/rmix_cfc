@@ -21,7 +21,7 @@ export default function Voiliers() {
           <Await resolve={boatsPromise}>
             {(boatsData) => {
               // Explicitly type boatsData as Boat[]
-              console.log(boatsData);
+              //console.log(boatsData);
               return boatsData.map((boat) => (
                 <Voilier key={boat.id} voilier={boat} />
               ));
