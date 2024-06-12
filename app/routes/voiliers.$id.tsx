@@ -207,43 +207,45 @@ export default function Component() {
                 Prix de location
               </h2>
               <div className="grid gap-6 py-8">
-                <div className="flex items-start gap-4">
+                <div className="flex items-center gap-4">
                   <Icon
                     name="CalendarDaysIcon"
                     className="w-8 h-8 text-primary"
                   />
                   <div>
-                    <h3 className="text-xl font-semibold">Daily Rate</h3>
+                    <h3 className="text-xl font-semibold">Prix à la journée</h3>
                     <p className="text-gray-500 dark:text-gray-400">
                       {`${boat.prixJour}`}€ par jours
                     </p>
                   </div>
                 </div>
-                <div className="flex items-start gap-4">
+                <div className="flex items-center gap-4">
                   <Icon
                     name="CalendarCheckIcon"
                     className="w-8 h-8 text-primary"
                   />
                   <div>
-                    <h3 className="text-xl font-semibold">Weekend Rate</h3>
+                    <h3 className="text-xl font-semibold">
+                      Prix pour le weekend
+                    </h3>
                     <p className="text-gray-500 dark:text-gray-400">
                       {`${boat.prixWeekend}`}€ pour le Weekend
                     </p>
                   </div>
                 </div>
-                <div className="flex items-start gap-4">
+                <div className="flex items-center gap-4">
                   <Icon name="CalendarIcon" className="w-8 h-8 text-primary" />
                   <div>
-                    <h3 className="text-xl font-semibold">Weekly Rate</h3>
+                    <h3 className="text-xl font-semibold">Prix à la semaine</h3>
                     <p className="text-gray-500 dark:text-gray-400">
                       {`${boat.prix}`}€ pour la semaine
                     </p>
                   </div>
                 </div>
-                <div className="flex items-start gap-4">
+                <div className="flex items-center gap-4">
                   <Icon name="AnchorIcon" className="w-8 h-8 text-primary" />
                   <div>
-                    <h3 className="text-xl font-semibold">Deposit</h3>
+                    <h3 className="text-xl font-semibold">Caution</h3>
                     <p className="text-gray-500 dark:text-gray-400">
                       {`${boat.caution}`}€ de caution
                     </p>
