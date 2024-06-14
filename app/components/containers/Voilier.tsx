@@ -35,34 +35,68 @@ type VoilierProps = {
   };
 };
 export default function Voilier({ voilier }: VoilierProps) {
-  // pas sur de ce truc je comprends pas vraiement cette partie
-  const [images, setImages] = useState(voilier.images);
-  const isMounted = useRef(false);
+  // // pas sur de ce truc je comprends pas vraiement cette partie
+  // const [images, setImages] = useState(voilier.images);
+  // const isMounted = useRef(false);
 
-  useEffect(() => {
-    isMounted.current = true;
-    return () => {
-      isMounted.current = false;
-    };
-  }, []);
-  const renderImage = (image: string, index: number) => (
-    <CarouselItem key={index}>
-      <div className="w-full h-60 min-w-80 overflow-hidden">
-        <Img
+  // useEffect(() => {
+  //   isMounted.current = true;
+  //   return () => {
+  //     isMounted.current = false;
+  //   };
+  // }, []);
+  /* <img
           alt={`Image ${index}`}
           className="w-full h-full object-cover"
           height={400}
           width={600}
-          loading={index > 0 ? "lazy" : "eager"}
+          // loading={index > 0 ? "lazy" : "eager"}
           src={[image, "/fallback-image.jpeg"]}
           crossOrigin="anonymous"
+        /> */
+  const ImageWithFallback = ({
+    src,
+    fallback,
+    alt,
+  }: {
+    src: string;
+    fallback: string;
+    alt: string;
+  }) => {
+    const [imgSrc, setImgSrc] = useState(src);
+
+    const handleError = () => {
+      if (imgSrc !== fallback) {
+        setImgSrc(fallback);
+      }
+    };
+
+    return <img src={imgSrc} alt={alt} onError={handleError} />;
+  };
+
+  const renderImage = (image: string, index: number) => (
+    <CarouselItem key={index}>
+      <div className="w-full h-60 min-w-80 overflow-hidden">
+        {/* <img
+          alt={`Image ${index}`}
+          className="w-full h-full object-cover"
+          height={400}
+          width={600}
+          // loading={index > 0 ? "lazy" : "eager"}
+          src={[image, "/fallback-image.jpeg"]}
+          crossOrigin="anonymous"
+        /> */}
+        <ImageWithFallback
+          src={image}
+          fallback="/fallback-image.jpeg"
+          alt={`Image ${index}`}
         />
       </div>
     </CarouselItem>
   );
 
   return (
-    <Card className="max-w-md mx-2 mt-4 bg-accent w-96">
+    <Card className="max-w-md mx-2 my-2 bg-accent w-96">
       <div className="relative">
         <Carousel
           className="rounded-t-lg container"
@@ -72,7 +106,7 @@ export default function Voilier({ voilier }: VoilierProps) {
         >
           <Link to={voilier.slug}>
             <CarouselContent className="flex">
-              {images.map((image, index) => renderImage(image, index))}
+              {voilier.images.map((image, index) => renderImage(image, index))}
             </CarouselContent>
           </Link>
           <CarouselPrevious className="absolute top-1/2 left-4 -translate-y-1/2 z-10 bg-white/50 hover:bg-white/80 p-2 rounded-full shadow-md transition-colors" />
