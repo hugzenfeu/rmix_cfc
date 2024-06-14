@@ -76,21 +76,18 @@ export default function Voilier({ voilier }: VoilierProps) {
   //   return <img src={imgSrc} alt={alt} onError={handleError} />;
   // };
 
-  {
-    /* <ImageWithFallback
+  /* <ImageWithFallback
           src={image}
           fallback="/fallback-image.jpeg"
           alt={`Image ${index}`}
         /> */
-  }
-  {
-    /* <img
+
+  /* <img
           src={image}
           onError={(e) => (
             (e.target.onerror = null), (e.target.src = "/fallback-image.jpeg")
           )}
         /> */
-  }
 
   const renderImage = (image: string, index: number) => (
     <CarouselItem key={index}>
