@@ -21,4 +21,8 @@ export default defineConfig({
     open: true,
     port: 3000,
   },
+  define: {
+    POSTHOG_API_KEY: JSON.stringify(process.env.POSTHOG_API_KEY),
+    POSTHOG_API_ENDPOINT: JSON.stringify(process.env.POSTHOG_API_ENDPOINT),
+  },
 });

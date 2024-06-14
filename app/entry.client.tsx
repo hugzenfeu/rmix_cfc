@@ -11,9 +11,9 @@ import posthog from "posthog-js";
 
 function PosthogInit() {
   useEffect(() => {
-    posthog.init("phc_E2B9SNsEGCzwkvBeK37KWkZ05N35ttUDgu5q5aVHXo8", {
-      api_host: "https://eu.i.posthog.com",
-      person_profiles: "identified_only", // or 'always' to create profiles for anonymous users as well
+    posthog.init(POSTHOG_API_KEY, {
+      api_host: POSTHOG_API_ENDPOINT,
+      person_profiles: "always", //"identified_only" or 'always' to create profiles for anonymous users as well
     });
   }, []);
 
