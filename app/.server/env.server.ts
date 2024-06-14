@@ -1,10 +1,9 @@
 import { z } from "zod";
 
 const envSchema = z.object({
-  NODE_ENV: z.string(),
-  PORT: z.string(),
   POSTHOG_API_ENDPOINT: z.string(),
   POSTHOG_API_KEY: z.string(),
+  DATABASE_URL: z.string(),
 });
 
 export const initEnv = () => {
