@@ -5,7 +5,7 @@ import type { LoaderFunctionArgs } from "@remix-run/node";
  * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
  */
 
-import { Await, Link, useLoaderData } from "@remix-run/react";
+import { Await, Link, defer, useLoaderData } from "@remix-run/react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
@@ -24,18 +24,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { SVGProps, Suspense, useEffect, useRef } from "react";
 import { JSX } from "react/jsx-runtime";
-import {
-  AnchorIcon,
-  CalendarCheckIcon,
-  CalendarDaysIcon,
-  CalendarIcon,
-  CompassIcon,
-  GaugeIcon,
-  RulerIcon,
-  SailboatIcon,
-  TicketIcon,
-  WavesIcon,
-} from "~/components/svg";
+import { Icon } from "app/components/utils/Icon";
 import {
   Carousel,
   CarouselContent,
@@ -46,19 +35,38 @@ import {
 import { Img } from "react-image";
 import { json } from "@remix-run/react";
 import { Boat } from "@prisma/client";
-import { findBoatBySlug } from "~/.server/controleurBoats";
+import { findBoatBySlug, findNBoats } from "~/.server/controleurBoats";
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const url = new URL(request.url);
+export const loader = async ({ params }: LoaderFunctionArgs) => {
+  const slug = params.id; // Assuming `id` is the dynamic parameter in your route
+  if (!slug) {
+    throw new Response("Boat not found", { status: 404 });
+  }
+  const autresAnnoncesPromise = findNBoats(3);
+  //.then((boats) =>
+  //   boats.map((boat) => ({
+  //     ...boat,
+  //     length: boat.length.toString(), // Convert Decimal to string
+  //     prix: boat.prix.toString(),
+  //     prixWeekend: boat.prixWeekend.toString(),
+  //     prixJour: boat.prixJour.toString(),
+  //     caution: boat.caution.toString(),
+  //     fuel: boat.fuel.toString(),
+  //   }))
+  // );
 
-  const slug = url.pathname.split("/").at(-1);
-  if (!slug) return "error";
-  const voilier = await findBoatBySlug(slug);
-  return json(voilier);
+  const boat = await findBoatBySlug(slug);
+  if (!boat) {
+    throw new Response("Boat not found", { status: 404 });
+  }
+  return defer({
+    boat,
+    autresAnnonces: autresAnnoncesPromise,
+  });
 };
 
 export default function Component() {
-  const boat = useLoaderData<typeof loader>();
+  const { boat, autresAnnonces } = useLoaderData<typeof loader>();
 
   const renderImage = (image: string, index: number) => (
     <CarouselItem key={index} className="mx-auto md:basis-1/2 lg:basis-1/3">
@@ -75,12 +83,9 @@ export default function Component() {
       </div>
     </CarouselItem>
   );
-  if (!boat) {
-    return <div>l'aled</div>;
-  }
 
   return (
-    <main className="flex-1">
+    <main className="flex-1 bg-background">
       <title>{boat.name}</title>
       <section>
         <div className="flex-col ">
@@ -98,7 +103,9 @@ export default function Component() {
             <CarouselNext className="absolute top-1/2 right-4 -translate-y-1/2 z-10 bg-white/50 hover:bg-white/80 p-2 rounded-full shadow-md transition-colors" />
           </Carousel>
           <div className="flex justify-center items-center min h-20">
-            <h1 className="text-3xl font-bold">{boat.name}</h1>
+            <h1 className="text-3xl font-bold">
+              {boat.brand} {boat.model} - {boat.name}
+            </h1>
           </div>
         </div>
       </section>
@@ -107,24 +114,19 @@ export default function Component() {
           <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
             <div>
               <h2 className="text-3xl font-bold tracking-tighter">
-                Sailboat Features
+                Description du bateau
               </h2>
               <div className="grid gap-6 py-8">
                 <div className="flex items-start gap-4">
-                  <CompassIcon className="w-8 h-8 text-primary" />
+                  <Icon name="CompassIcon" className="w-8 h-8 text-primary" />
                   <div>
-                    <h3 className="text-xl font-semibold">
-                      Fully Equipped Navigation
-                    </h3>
                     <p className="text-gray-500 dark:text-gray-400">
-                      Our sailboat is equipped with state-of-the-art navigation
-                      systems, including GPS, chartplotter, and VHF, ensuring a
-                      safe and enjoyable sailing experience.
+                      {boat.description}
                     </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
-                  <WavesIcon className="w-8 h-8 text-primary" />
+                  <Icon name="WavesIcon" className="w-8 h-8 text-primary" />
                   <div>
                     <h3 className="text-xl font-semibold">
                       Comfortable Accommodations
@@ -137,7 +139,7 @@ export default function Component() {
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
-                  <SailboatIcon className="w-8 h-8 text-primary" />
+                  <Icon name="SailboatIcon" className="w-8 h-8 text-primary" />
                   <div>
                     <h3 className="text-xl font-semibold">
                       High-Performance Sails
@@ -157,34 +159,38 @@ export default function Component() {
               </h2>
               <div className="grid gap-6 py-8">
                 <div className="flex items-start gap-4">
-                  <RulerIcon className="w-8 h-8 text-primary" />
+                  <Icon name="Ruler" className="w-8 h-8 text-primary" />
                   <div>
                     <h3 className="text-xl font-semibold">Longueur</h3>
                     <p className="text-gray-500 dark:text-gray-400">{`${boat.length}m`}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
-                  <GaugeIcon className="w-8 h-8 text-primary" />
+                  <Icon name="GaugeIcon" className="w-8 h-8 text-primary" />
                   <div>
-                    <h3 className="text-xl font-semibold">Top Speed</h3>
-                    <p className="text-gray-500 dark:text-gray-400">15 knots</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <TicketIcon className="w-8 h-8 text-primary" />
-                  <div>
-                    <h3 className="text-xl font-semibold">Capacité</h3>
+                    <h3 className="text-xl font-semibold">Vitesse de coque</h3>
                     <p className="text-gray-500 dark:text-gray-400">
-                      {boat.capacite} passagers
+                      {`${boat.speed}`} kts
                     </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
-                  <AnchorIcon className="w-8 h-8 text-primary" />
+                  <Icon name="TicketIcon" className="w-8 h-8 text-primary" />
                   <div>
-                    <h3 className="text-xl font-semibold">Fuel Capacity</h3>
+                    <h3 className="text-xl font-semibold">Capacité</h3>
                     <p className="text-gray-500 dark:text-gray-400">
-                      50 gallons
+                      {`${boat.capacite}`} passagers
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <Icon name="AnchorIcon" className="w-8 h-8 text-primary" />
+                  <div>
+                    <h3 className="text-xl font-semibold">
+                      Capacité du réservoir
+                    </h3>
+                    <p className="text-gray-500 dark:text-gray-400">
+                      {`${boat.fuel}`} litres
                     </p>
                   </div>
                 </div>
@@ -198,42 +204,50 @@ export default function Component() {
           <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
             <div>
               <h2 className="text-3xl font-bold tracking-tighter">
-                Boat Rental Pricing
+                Prix de location
               </h2>
               <div className="grid gap-6 py-8">
-                <div className="flex items-start gap-4">
-                  <CalendarDaysIcon className="w-8 h-8 text-primary" />
+                <div className="flex items-center gap-4">
+                  <Icon
+                    name="CalendarDaysIcon"
+                    className="w-8 h-8 text-primary"
+                  />
                   <div>
-                    <h3 className="text-xl font-semibold">Daily Rate</h3>
+                    <h3 className="text-xl font-semibold">Prix à la journée</h3>
                     <p className="text-gray-500 dark:text-gray-400">
-                      $500 per day
+                      {`${boat.prixJour}`}€ par jours
                     </p>
                   </div>
                 </div>
-                <div className="flex items-start gap-4">
-                  <CalendarCheckIcon className="w-8 h-8 text-primary" />
+                <div className="flex items-center gap-4">
+                  <Icon
+                    name="CalendarCheckIcon"
+                    className="w-8 h-8 text-primary"
+                  />
                   <div>
-                    <h3 className="text-xl font-semibold">Weekend Rate</h3>
+                    <h3 className="text-xl font-semibold">
+                      Prix pour le weekend
+                    </h3>
                     <p className="text-gray-500 dark:text-gray-400">
-                      $1,200 for 2 days
+                      {`${boat.prixWeekend}`}€ pour le Weekend
                     </p>
                   </div>
                 </div>
-                <div className="flex items-start gap-4">
-                  <CalendarIcon className="w-8 h-8 text-primary" />
+                <div className="flex items-center gap-4">
+                  <Icon name="CalendarIcon" className="w-8 h-8 text-primary" />
                   <div>
-                    <h3 className="text-xl font-semibold">Weekly Rate</h3>
+                    <h3 className="text-xl font-semibold">Prix à la semaine</h3>
                     <p className="text-gray-500 dark:text-gray-400">
-                      $2,500 for 7 days
+                      {`${boat.prix}`}€ pour la semaine
                     </p>
                   </div>
                 </div>
-                <div className="flex items-start gap-4">
-                  <AnchorIcon className="w-8 h-8 text-primary" />
+                <div className="flex items-center gap-4">
+                  <Icon name="AnchorIcon" className="w-8 h-8 text-primary" />
                   <div>
-                    <h3 className="text-xl font-semibold">Deposit</h3>
+                    <h3 className="text-xl font-semibold">Caution</h3>
                     <p className="text-gray-500 dark:text-gray-400">
-                      $1,000 refundable security deposit
+                      {`${boat.caution}`}€ de caution
                     </p>
                   </div>
                 </div>
@@ -241,11 +255,11 @@ export default function Component() {
             </div>
             <div>
               <h2 className="text-3xl font-bold tracking-tighter">
-                Book Your Sailing Adventure
+                Réservez votre aventure en voilier
               </h2>
               <form className="grid gap-4 py-8">
                 <div className="grid gap-2">
-                  <Label htmlFor="start-date">Start Date</Label>
+                  <Label htmlFor="start-date">Début du séjour</Label>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
@@ -253,7 +267,7 @@ export default function Component() {
                         className="flex-col items-start w-full h-auto"
                       >
                         <span className="font-semibold uppercase text-[0.65rem]">
-                          Check in
+                          Arrivée
                         </span>
                         <span className="font-normal">4/2/2024</span>
                       </Button>
@@ -264,7 +278,7 @@ export default function Component() {
                   </Popover>
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="end-date">End Date</Label>
+                  <Label htmlFor="end-date">Fin du séjour</Label>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
@@ -272,7 +286,7 @@ export default function Component() {
                         className="flex-col items-start w-full h-auto"
                       >
                         <span className="font-semibold uppercase text-[0.65rem]">
-                          Check out
+                          Départ
                         </span>
                         <span className="font-normal">10/2/2024</span>
                       </Button>
@@ -283,24 +297,23 @@ export default function Component() {
                   </Popover>
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="guests">Number of Guests</Label>
+                  <Label htmlFor="guests">Nombre de passagers</Label>
                   <Select defaultValue="2">
-                    <SelectTrigger className="w-24">
+                    <SelectTrigger className="w-32">
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="1">1 guest</SelectItem>
-                      <SelectItem value="2">2 guests</SelectItem>
-                      <SelectItem value="3">3 guests</SelectItem>
-                      <SelectItem value="4">4 guests</SelectItem>
-                      <SelectItem value="5">5 guests</SelectItem>
-                      <SelectItem value="6">6 guests</SelectItem>
+                      {[...Array(boat.capacite)].map((_, i) => (
+                        <SelectItem key={i} value={(i + 1).toString()}>
+                          {i + 1} passager{i + 1 !== 1 ? "s" : ""}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="name">Name</Label>
-                  <Input id="name" type="text" placeholder="John Doe" />
+                  <Label htmlFor="nom">Nom</Label>
+                  <Input id="nom" type="text" placeholder="John Doe" />
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="email">Email</Label>
@@ -311,14 +324,10 @@ export default function Component() {
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="phone">Phone</Label>
-                  <Input
-                    id="phone"
-                    type="tel"
-                    placeholder="+1 (123) 456-7890"
-                  />
+                  <Label htmlFor="telephone">Telephone</Label>
+                  <Input id="phone" type="tel" placeholder="05 05 05 05 05" />
                 </div>
-                <Button size="lg">Submit Inquiry</Button>
+                <Button size="lg">Demander un devis</Button>
               </form>
             </div>
           </div>
@@ -349,7 +358,10 @@ export default function Component() {
                     yacht featuring a private jacuzzi.
                   </p>
                   <div className="flex items-center gap-2 text-sm font-medium">
-                    <CalendarDaysIcon className="w-4 h-4 text-primary" />
+                    <Icon
+                      name="CalendarDaysIcon"
+                      className="w-4 h-4 text-primary"
+                    />
                     <span>$800 per day</span>
                   </div>
                   <Button variant="link" className="mt-2">
@@ -374,7 +386,10 @@ export default function Component() {
                     and stability for a comfortable sailing experience.
                   </p>
                   <div className="flex items-center gap-2 text-sm font-medium">
-                    <CalendarDaysIcon className="w-4 h-4 text-primary" />
+                    <Icon
+                      name="CalendarDaysIcon"
+                      className="w-4 h-4 text-primary"
+                    />
                     <span>$600 per day</span>
                   </div>
                   <Button variant="link" className="mt-2">

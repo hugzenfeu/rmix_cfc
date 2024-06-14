@@ -5,14 +5,27 @@
  */
 
 import { RemixBrowser } from "@remix-run/react";
-import { startTransition, StrictMode } from "react";
+import { startTransition, StrictMode, useEffect } from "react";
 import { hydrateRoot } from "react-dom/client";
+import posthog from "posthog-js";
+
+function PosthogInit() {
+  useEffect(() => {
+    posthog.init(POSTHOG_API_KEY, {
+      api_host: POSTHOG_API_ENDPOINT,
+      person_profiles: "always", //"identified_only" or 'always' to create profiles for anonymous users as well
+    });
+  }, []);
+
+  return null;
+}
 
 startTransition(() => {
   hydrateRoot(
     document,
     <StrictMode>
       <RemixBrowser />
+      <PosthogInit />
     </StrictMode>
   );
 });

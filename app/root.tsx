@@ -1,3 +1,5 @@
+import type { LoaderFunctionArgs } from "@remix-run/node";
+
 import {
   Links,
   Meta,
@@ -5,17 +7,37 @@ import {
   Scripts,
   ScrollRestoration,
   isRouteErrorResponse,
+  json,
+  useLoaderData,
   useRouteError,
 } from "@remix-run/react";
 import { LinksFunction } from "@remix-run/node";
-
+import iconHref from "app/components/icons/icon.svg?url";
+//import iconHref from "app/components/icons/icon.svg";
 import stylesheet from "~/globals.css?url";
 
 import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
+import { Icon } from "app/components/utils/Icon";
+import { usePosthosPageView } from "./hooks/posthog/usePosthosPageview";
+import { usePosthogDistinctIdSync } from "./hooks/posthog/usePosthogDistinctidSync";
+import { getPosthogDistinctID } from "./.server/posthog/init.server";
+import { getClientEnv } from "./.server/env.server";
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const distinctId = getPosthogDistinctID(request);
+  const clientEnv = getClientEnv();
+  return json({ distinctId, clientEnv });
+};
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
+  {
+    rel: "preload",
+    href: iconHref,
+    as: "fetch",
+    type: "image/svg+xml",
+  },
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -41,6 +63,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  const { distinctId, clientEnv } = useLoaderData<typeof loader>();
+  usePosthogDistinctIdSync(); //pour l'instatn inutile car pas de tracker coté serveur
+  usePosthosPageView();
   return (
     // <Layout>
     <Outlet />

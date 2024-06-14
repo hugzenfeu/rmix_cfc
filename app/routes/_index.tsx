@@ -1,5 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
 import { Button } from "@/components/ui/button";
+import { NavLink } from "@remix-run/react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -10,8 +11,8 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   return (
-    <div className="flex flex-col items-center bg-neutral min-h-screen p-4 mx-16">
-      <div className="flex flex-col min-h-96 lg:flex-row items-center border-accent  rounded-2xl bg-secondary shadow-lg p-6  mx-auto my-2">
+    <div className="flex flex-col items-center bg-neutral min-h-screen md:p-4 md:mx-16">
+      <div className="flex flex-col min-h-96 lg:flex-row items-center border-accent  rounded-2xl bg-secondary shadow-lg p-6  md:mx-auto my-2">
         <div className="w-full lg:w-1/2 p-4">
           <img
             src="https://filjhbmunjsumdqyuiwj.supabase.co/storage/v1/object/sign/Bateaux/vignette_bateau.JPG?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJCYXRlYXV4L3ZpZ25ldHRlX2JhdGVhdS5KUEciLCJpYXQiOjE3MTcwOTc0MTAsImV4cCI6MTc0ODYzMzQxMH0.HZcYDt6QJ0WO7yH65Ej48JDUAs0lDEgwYTXGrPCLkes&t=2024-05-30T19%3A30%3A10.521Z"
@@ -54,9 +55,12 @@ export default function Index() {
           <p className="mb-8 text-lg font-semibold text-primary">
             Pour découvrir notre flotte c’est ici:
           </p>
-          <Button className="rounded-md px-6 py-2 bg-primary text-secondary hover:bg-primary-dark">
+          <NavLink
+            to={"/voiliers"}
+            className="rounded-md px-6 py-2 bg-primary text-secondary hover:bg-primary-dark"
+          >
             Nos voiliers
-          </Button>
+          </NavLink>
         </div>
         <div className="w-full lg:w-1/2 p-4">
           <img

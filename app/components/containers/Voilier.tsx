@@ -10,13 +10,88 @@ import { Card } from "@/components/ui/card";
 
 import { Link } from "@remix-run/react";
 import { Boat } from "@prisma/client";
-import { RulerIcon, ShirtIcon, StarIcon } from "../svg";
+
+import { Icon } from "app/components/utils/Icon";
 import { Img } from "react-image";
+import { useEffect, useRef, useState } from "react";
 
 type VoilierProps = {
-  voilier: Boat;
+  voilier: {
+    id: number;
+    slug: string;
+    name: string;
+    year: number;
+    boatType: string;
+    brand: string;
+    model: string;
+    length: string;
+    thumbnail: string;
+    images: string[];
+    prix: string;
+    capacite: number;
+    Nreviews: number;
+    Ncabine: number;
+    star: number;
+  };
 };
 export default function Voilier({ voilier }: VoilierProps) {
+  // // pas sur de ce truc je comprends pas vraiement cette partie ca marche mais ca lève une erreur de layout ?!
+  const [images, setImages] = useState(voilier.images);
+  const isMounted = useRef(false);
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+  /* 
+  différents essais
+  <img
+          alt={`Image ${index}`}
+          className="w-full h-full object-cover"
+          height={400}
+          width={600}
+          // loading={index > 0 ? "lazy" : "eager"}
+          src={[image, "/fallback-image.jpeg"]}
+          crossOrigin="anonymous"
+        /> */
+  // const ImageWithFallback = ({
+  //   src,
+  //   fallback,
+  //   alt,
+  // }: {
+  //   src: string;
+  //   fallback: string;
+  //   alt: string;
+  // }) => {
+  //   const [imgSrc, setImgSrc] = useState(src);
+
+  //   const handleError = () => {
+  //     if (imgSrc !== fallback) {
+  //       setImgSrc(fallback);
+  //     }
+  //   };
+
+  //   return <img src={imgSrc} alt={alt} onError={handleError} />;
+  // };
+
+  {
+    /* <ImageWithFallback
+          src={image}
+          fallback="/fallback-image.jpeg"
+          alt={`Image ${index}`}
+        /> */
+  }
+  {
+    /* <img
+          src={image}
+          onError={(e) => (
+            (e.target.onerror = null), (e.target.src = "/fallback-image.jpeg")
+          )}
+        /> */
+  }
+
   const renderImage = (image: string, index: number) => (
     <CarouselItem key={index}>
       <div className="w-full h-60 min-w-80 overflow-hidden">
@@ -34,7 +109,7 @@ export default function Voilier({ voilier }: VoilierProps) {
   );
 
   return (
-    <Card className="max-w-md mx-2 mt-4 bg-accent w-96">
+    <Card className="max-w-md mx-2 my-2 bg-accent w-96">
       <div className="relative">
         <Carousel
           className="rounded-t-lg container"
@@ -44,7 +119,7 @@ export default function Voilier({ voilier }: VoilierProps) {
         >
           <Link to={voilier.slug}>
             <CarouselContent className="flex">
-              {voilier.images.map(renderImage)}
+              {voilier.images.map((image, index) => renderImage(image, index))}
             </CarouselContent>
           </Link>
           <CarouselPrevious className="absolute top-1/2 left-4 -translate-y-1/2 z-10 bg-white/50 hover:bg-white/80 p-2 rounded-full shadow-md transition-colors" />
@@ -66,13 +141,10 @@ export default function Voilier({ voilier }: VoilierProps) {
             {/* Render stars */}
             <div className="flex items-center gap-1">
               {Array.from({ length: 5 }, (_, i) => (
-                <StarIcon
+                <Icon
+                  name={i < voilier.star ? "StarIconFill" : "StarIcon"}
                   key={i}
-                  className={`w-5 h-5 ${
-                    i < voilier.star
-                      ? "fill-primary"
-                      : "fill-muted stroke-muted-foreground"
-                  }`}
+                  className="w-5 h-5 fill-primary"
                 />
               ))}
             </div>
@@ -82,19 +154,20 @@ export default function Voilier({ voilier }: VoilierProps) {
           </div>
           <div className="flex flex-wrap items-center gap-4 mt-4">
             <div className="flex items-center gap-2">
-              <ShirtIcon className="w-5 h-5 fill-muted" />
+              {/* <Bed /> */}
+              <Icon name="BedSvgrepoCom" className="w-5 h-5 fill-muted " />
               <span className="text-sm text-gray-500 dark:text-gray-400">
                 {voilier.Ncabine} cabines
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <RulerIcon className="w-5 h-5 fill-muted" />
+              <Icon name="Ruler" className="w-5 h-5 fill-muted" />
               <span className="text-sm text-gray-500 dark:text-gray-400">
                 {voilier.boatType}
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <RulerIcon className="w-5 h-5 fill-muted" />
+              <Icon name="Ruler" className="w-5 h-5 fill-muted" />
               <span className="text-sm text-gray-500 dark:text-gray-400">
                 {`${voilier.length}`}m
               </span>
