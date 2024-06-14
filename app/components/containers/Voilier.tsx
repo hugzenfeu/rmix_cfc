@@ -35,17 +35,19 @@ type VoilierProps = {
   };
 };
 export default function Voilier({ voilier }: VoilierProps) {
-  // // pas sur de ce truc je comprends pas vraiement cette partie
-  // const [images, setImages] = useState(voilier.images);
-  // const isMounted = useRef(false);
+  // // pas sur de ce truc je comprends pas vraiement cette partie ca marche mais ca lève une erreur de layout ?!
+  const [images, setImages] = useState(voilier.images);
+  const isMounted = useRef(false);
 
-  // useEffect(() => {
-  //   isMounted.current = true;
-  //   return () => {
-  //     isMounted.current = false;
-  //   };
-  // }, []);
-  /* <img
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+  /* 
+  différents essais
+  <img
           alt={`Image ${index}`}
           className="w-full h-full object-cover"
           height={400}
@@ -54,42 +56,53 @@ export default function Voilier({ voilier }: VoilierProps) {
           src={[image, "/fallback-image.jpeg"]}
           crossOrigin="anonymous"
         /> */
-  const ImageWithFallback = ({
-    src,
-    fallback,
-    alt,
-  }: {
-    src: string;
-    fallback: string;
-    alt: string;
-  }) => {
-    const [imgSrc, setImgSrc] = useState(src);
+  // const ImageWithFallback = ({
+  //   src,
+  //   fallback,
+  //   alt,
+  // }: {
+  //   src: string;
+  //   fallback: string;
+  //   alt: string;
+  // }) => {
+  //   const [imgSrc, setImgSrc] = useState(src);
 
-    const handleError = () => {
-      if (imgSrc !== fallback) {
-        setImgSrc(fallback);
-      }
-    };
+  //   const handleError = () => {
+  //     if (imgSrc !== fallback) {
+  //       setImgSrc(fallback);
+  //     }
+  //   };
 
-    return <img src={imgSrc} alt={alt} onError={handleError} />;
-  };
+  //   return <img src={imgSrc} alt={alt} onError={handleError} />;
+  // };
+
+  {
+    /* <ImageWithFallback
+          src={image}
+          fallback="/fallback-image.jpeg"
+          alt={`Image ${index}`}
+        /> */
+  }
+  {
+    /* <img
+          src={image}
+          onError={(e) => (
+            (e.target.onerror = null), (e.target.src = "/fallback-image.jpeg")
+          )}
+        /> */
+  }
 
   const renderImage = (image: string, index: number) => (
     <CarouselItem key={index}>
       <div className="w-full h-60 min-w-80 overflow-hidden">
-        {/* <img
+        <Img
           alt={`Image ${index}`}
           className="w-full h-full object-cover"
           height={400}
           width={600}
-          // loading={index > 0 ? "lazy" : "eager"}
+          loading={index > 0 ? "lazy" : "eager"}
           src={[image, "/fallback-image.jpeg"]}
           crossOrigin="anonymous"
-        /> */}
-        <ImageWithFallback
-          src={image}
-          fallback="/fallback-image.jpeg"
-          alt={`Image ${index}`}
         />
       </div>
     </CarouselItem>

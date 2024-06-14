@@ -24,7 +24,8 @@ export const getServerEnv = () => initEnv();
 export const getClientEnv = () => {
   const serverEnv = getServerEnv();
   return {
-    NODE_ENV: serverEnv.NODE_ENV,
+    POSTHOG_API_ENDPOINT: serverEnv.POSTHOG_API_ENDPOINT,
+    POSTHOG_API_KEY: serverEnv.POSTHOG_API_KEY,
   };
 };
 
