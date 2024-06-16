@@ -43,7 +43,7 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
   if (!slug) {
     throw new Response("Boat not found", { status: 404 });
   }
-  const autresAnnoncesPromise = findNBoats(3);
+  const autresAnnoncesPromise = findNBoats(3, slug);
 
   const boat = await findBoatBySlug(slug);
   if (!boat) {
