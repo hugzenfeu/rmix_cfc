@@ -9,7 +9,6 @@ import {
 import { Card } from "@/components/ui/card";
 
 import { Link } from "@remix-run/react";
-import { Boat } from "@prisma/client";
 
 import { Icon } from "app/components/utils/Icon";
 import { Img } from "react-image";
@@ -36,7 +35,7 @@ type VoilierProps = {
 };
 export default function Voilier({ voilier }: VoilierProps) {
   // // pas sur de ce truc je comprends pas vraiement cette partie ca marche mais ca lève une erreur de layout ?!
-  const [images, setImages] = useState(voilier.images);
+  /* 
   const isMounted = useRef(false);
 
   useEffect(() => {
@@ -45,7 +44,7 @@ export default function Voilier({ voilier }: VoilierProps) {
       isMounted.current = false;
     };
   }, []);
-  /* 
+  
   différents essais
   <img
           alt={`Image ${index}`}
