@@ -1,3 +1,4 @@
+import type { ActionFunctionArgs } from "@remix-run/node";
 import type { LoaderFunctionArgs } from "@remix-run/node";
 /**
  * v0 by Vercel.
@@ -35,8 +36,26 @@ import {
 import { Img } from "react-image";
 import { json } from "@remix-run/react";
 import { Boat } from "@prisma/client";
-import { findBoatBySlug, findNBoats } from "~/.server/controleurBoats";
+import {
+  findBoatBySlug,
+  findNBoats,
+  createDemande,
+} from "~/.server/controleurBoats";
 import Voilier from "~/components/containers/Voilier";
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const formData = await request.formData();
+  const data = {
+    startDate: formData.get("start-date"),
+    endDate: formData.get("end-date"),
+    guests: formData.get("guests"),
+    nom: formData.get("nom"),
+    email: formData.get("email"),
+    telephone: formData.get("telephone"),
+  };
+  await createDemande({ data });
+  return null;
+};
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const slug = params.id; // Assuming `id` is the dynamic parameter in your route
@@ -253,7 +272,7 @@ export default function Component() {
               <h2 className="text-3xl font-bold tracking-tighter">
                 Réservez votre aventure en voilier
               </h2>
-              <form className="grid gap-4 py-8">
+              <form method="post" className="grid gap-4 py-8">
                 <div className="grid gap-2">
                   <Label htmlFor="start-date">Début du séjour</Label>
                   <Popover>

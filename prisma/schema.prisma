@@ -14,30 +14,40 @@ datasource db {
 }
 
 model Boat {
-  id              Int      @id @default(autoincrement())
-  slug            String   @unique @db.VarChar(255)
-  name            String   @db.VarChar(255)
-  year            Int      @db.SmallInt
-  boatType        String   @db.VarChar(255)
-  brand           String   @db.VarChar(255)
-  model           String   @db.VarChar(255)
-  length          Decimal  @db.Decimal(8, 4)
-  thumbnail       String   @db.VarChar(1024)
-  images          String[] @db.VarChar(1024)
-  prix            Decimal  @db.Decimal(8, 2)
-  prixWeekend     Decimal  @default(0) @db.Decimal(8, 2)
-  prixJour        Decimal  @default(0) @db.Decimal(8, 2)
-  caution         Decimal  @default(0) @db.Decimal(8, 2)
-  capacite        Int      @db.SmallInt
-  Ncabines        Int      @default(0) @db.SmallInt
-  Nreviews        Int      @db.SmallInt
-  Ncabine         Int      @db.SmallInt
-  star            Int      @db.SmallInt
-  speed           Int      @default(0) @db.SmallInt
-  fuel            Int      @default(0) @db.SmallInt
-  description     String   @default("description") @db.VarChar(1024)
-  caracteristique String   @default("caractéristique") @db.VarChar(1024)
-  equipement      String   @default("equipement") @db.VarChar(1024)
-  electronique    String   @default("electronique") @db.VarChar(1024)
-  confort         String   @default("confort") @db.VarChar(1024)
+  id          Int      @id @default(autoincrement())
+  slug        String   @unique @db.VarChar(255)
+  name        String   @db.VarChar(255)
+  year        Int      @db.SmallInt
+  boatType    String   @db.VarChar(255)
+  brand       String   @db.VarChar(255)
+  model       String   @db.VarChar(255)
+  length      Decimal  @db.Decimal(8, 4)
+  thumbnail   String   @db.VarChar(1024)
+  images      String[] @db.VarChar(1024)
+  prix        Decimal  @db.Decimal(8, 2)
+  prixWeekend Decimal  @default(0) @db.Decimal(8, 2)
+  prixJour    Decimal  @default(0) @db.Decimal(8, 2)
+  caution     Decimal  @default(0) @db.Decimal(8, 2)
+  capacite    Int      @db.SmallInt
+
+  Nreviews        Int    @db.SmallInt
+  Ncabine         Int    @db.SmallInt
+  star            Int    @db.SmallInt
+  speed           Int    @default(0) @db.SmallInt
+  fuel            Int    @default(0) @db.SmallInt
+  description     String @default("description") @db.VarChar(1024)
+  caracteristique String @default("caractéristique") @db.VarChar(1024)
+  equipement      String @default("equipement") @db.VarChar(1024)
+  electronique    String @default("electronique") @db.VarChar(1024)
+  confort         String @default("confort") @db.VarChar(1024)
+}
+
+model Demande {
+  id        Int      @id @default(autoincrement())
+  startDate DateTime @db.Date
+  endDate   DateTime @db.Date
+  guests    Int      @db.SmallInt
+  nom       String   @db.VarChar(255)
+  email     String   @db.VarChar(255)
+  telephone String   @db.VarChar
 }
