@@ -36,6 +36,7 @@ import { Img } from "react-image";
 import { json } from "@remix-run/react";
 import { Boat } from "@prisma/client";
 import { findBoatBySlug, findNBoats } from "~/.server/controleurBoats";
+import Voilier from "~/components/containers/Voilier";
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const slug = params.id; // Assuming `id` is the dynamic parameter in your route
@@ -347,74 +348,20 @@ export default function Component() {
         <div className="container px-4 md:px-6">
           <div className="flex-col justify-around gap-16">
             <h2 className="text-3xl font-bold tracking-tighter">
-              Other Sailboat Listings
+              Autres annonces
             </h2>
-            <div className="flex">
-              <div className="flex items-start gap-4">
-                <img
-                  src="/fallback-image.jpeg"
-                  width={300}
-                  height={200}
-                  alt="Sailboat 2"
-                  className="rounded-lg object-cover w-24 h-24"
-                />
-                <div>
-                  <h3 className="text-xl font-semibold">
-                    Luxury Yacht with Jacuzzi
-                  </h3>
-                  <p className="text-gray-500 dark:text-gray-400">
-                    Experience the ultimate in luxury sailing with our spacious
-                    yacht featuring a private jacuzzi.
-                  </p>
-                  <div className="flex items-center gap-2 text-sm font-medium">
-                    <Icon
-                      name="CalendarDaysIcon"
-                      className="w-4 h-4 text-primary"
-                    />
-                    <span>$800 per day</span>
-                  </div>
-                  <Button variant="link" className="mt-2">
-                    View Listing
-                  </Button>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <img
-                  src="/fallback-image.jpeg"
-                  width={300}
-                  height={200}
-                  alt="Sailboat 3"
-                  className="rounded-lg object-cover w-24 h-24"
-                />
-                <div>
-                  <h3 className="text-xl font-semibold">
-                    Family-Friendly Catamaran
-                  </h3>
-                  <p className="text-gray-500 dark:text-gray-400">
-                    Ideal for families, our spacious catamaran offers ample room
-                    and stability for a comfortable sailing experience.
-                  </p>
-                  <div className="flex items-center gap-2 text-sm font-medium">
-                    <Icon
-                      name="CalendarDaysIcon"
-                      className="w-4 h-4 text-primary"
-                    />
-                    <span>$600 per day</span>
-                  </div>
-                  <Button variant="link" className="mt-2">
-                    View Listing
-                  </Button>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <img
-                  src="/fallback-image.jpeg"
-                  width={300}
-                  height={200}
-                  alt="Sailboat 4"
-                  className="rounded-lg object-cover w-24 h-24"
-                />
-              </div>
+            <div className="flex mt-4">
+              <Suspense fallback={<div>Loading...</div>}>
+                <Await resolve={autresAnnonces}>
+                  {(boatsData) => {
+                    // Explicitly type boatsData as Boat[]
+                    //console.log(boatsData);
+                    return boatsData.map((boat) => (
+                      <Voilier key={boat.id} voilier={boat} />
+                    ));
+                  }}
+                </Await>
+              </Suspense>
             </div>
           </div>
         </div>
