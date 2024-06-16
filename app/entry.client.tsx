@@ -8,6 +8,7 @@ import { RemixBrowser } from "@remix-run/react";
 import { startTransition, StrictMode, useEffect } from "react";
 import { hydrateRoot } from "react-dom/client";
 import posthog from "posthog-js";
+import { useClientEnv } from "./root";
 
 function PosthogInit() {
   useEffect(() => {
