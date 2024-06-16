@@ -22,7 +22,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { SVGProps, Suspense, useEffect, useRef } from "react";
+import { SVGProps, Suspense, useEffect, useRef, useState } from "react";
 import { JSX } from "react/jsx-runtime";
 import { Icon } from "app/components/utils/Icon";
 import {
@@ -43,17 +43,6 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
     throw new Response("Boat not found", { status: 404 });
   }
   const autresAnnoncesPromise = findNBoats(3);
-  //.then((boats) =>
-  //   boats.map((boat) => ({
-  //     ...boat,
-  //     length: boat.length.toString(), // Convert Decimal to string
-  //     prix: boat.prix.toString(),
-  //     prixWeekend: boat.prixWeekend.toString(),
-  //     prixJour: boat.prixJour.toString(),
-  //     caution: boat.caution.toString(),
-  //     fuel: boat.fuel.toString(),
-  //   }))
-  // );
 
   const boat = await findBoatBySlug(slug);
   if (!boat) {
@@ -67,6 +56,19 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 
 export default function Component() {
   const { boat, autresAnnonces } = useLoaderData<typeof loader>();
+  const [startDate, setStartDate] = useState<Date | undefined>(new Date());
+  const [endDate, setEndDate] = useState<Date | undefined>(() => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return tomorrow;
+  });
+
+  // useEffect(() => {
+  //   setStartDate(new Date());
+  //   const tomorrow = new Date();
+  //   tomorrow.setDate(tomorrow.getDate() + 1);
+  //   setEndDate(tomorrow);
+  // }, []);
 
   const renderImage = (image: string, index: number) => (
     <CarouselItem key={index} className="mx-auto md:basis-1/2 lg:basis-1/3">
@@ -120,6 +122,7 @@ export default function Component() {
                 <div className="flex items-start gap-4">
                   <Icon name="CompassIcon" className="w-8 h-8 text-primary" />
                   <div>
+                    <h3 className="text-xl font-semibold">Généralitées</h3>
                     <p className="text-gray-500 dark:text-gray-400">
                       {boat.description}
                     </p>
@@ -128,26 +131,18 @@ export default function Component() {
                 <div className="flex items-start gap-4">
                   <Icon name="WavesIcon" className="w-8 h-8 text-primary" />
                   <div>
-                    <h3 className="text-xl font-semibold">
-                      Comfortable Accommodations
-                    </h3>
+                    <h3 className="text-xl font-semibold">Confort</h3>
                     <p className="text-gray-500 dark:text-gray-400">
-                      The sailboat features a spacious cabin with a comfortable
-                      double bed, as well as a galley and seating area for
-                      relaxing and dining.
+                      {boat.confort}
                     </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
                   <Icon name="SailboatIcon" className="w-8 h-8 text-primary" />
                   <div>
-                    <h3 className="text-xl font-semibold">
-                      High-Performance Sails
-                    </h3>
+                    <h3 className="text-xl font-semibold">Equipement</h3>
                     <p className="text-gray-500 dark:text-gray-400">
-                      Our sailboat is equipped with a set of high-quality sails
-                      that provide excellent performance and responsiveness,
-                      allowing you to truly experience the thrill of sailing.
+                      {boat.equipement}
                     </p>
                   </div>
                 </div>
@@ -269,11 +264,19 @@ export default function Component() {
                         <span className="font-semibold uppercase text-[0.65rem]">
                           Arrivée
                         </span>
-                        <span className="font-normal">4/2/2024</span>
+                        <span className="font-normal">
+                          {startDate
+                            ? startDate.toDateString()
+                            : "Select a date"}
+                        </span>
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="p-0 max-w-[276px]">
-                      <Calendar />
+                      <Calendar
+                        mode="single"
+                        selected={startDate}
+                        onSelect={setStartDate}
+                      />
                     </PopoverContent>
                   </Popover>
                 </div>
@@ -288,11 +291,17 @@ export default function Component() {
                         <span className="font-semibold uppercase text-[0.65rem]">
                           Départ
                         </span>
-                        <span className="font-normal">10/2/2024</span>
+                        <span className="font-normal">
+                          {endDate ? endDate.toDateString() : "Select a date"}
+                        </span>
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="p-0 max-w-[276px]">
-                      <Calendar />
+                      <Calendar
+                        mode="single"
+                        selected={endDate}
+                        onSelect={setEndDate}
+                      />
                     </PopoverContent>
                   </Popover>
                 </div>
