@@ -26,6 +26,8 @@ export async function findBoatBySlug(slug: string) {
   return voilier;
 }
 
+//WIP
+
 export async function createDemande({
   data: { startDate, endDate, guests, nom, email, telephone },
 }: {
