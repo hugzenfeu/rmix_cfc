@@ -51,3 +51,10 @@ model Demande {
   email     String   @db.VarChar(255)
   telephone String   @db.VarChar
 }
+
+model User {
+  id         String   @id @default(uuid())
+  login      String   @unique @db.VarChar(255)
+  pass       String   @db.VarChar(255)
+  createDate DateTime @default(now()) @db.Date
+}
