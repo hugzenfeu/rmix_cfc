@@ -29,6 +29,7 @@ export const getClientEnv = () => {
 };
 
 export type CLIENT_ENV = ReturnType<typeof getClientEnv>;
+
 type APP_ENV = z.infer<typeof envSchema>;
 
 declare global {

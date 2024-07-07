@@ -17,6 +17,7 @@ const ABORT_DELAY = 5_000;
 
 //initialise env variable
 initEnv();
+
 export default function handleRequest(
   request: Request,
   responseStatusCode: number,

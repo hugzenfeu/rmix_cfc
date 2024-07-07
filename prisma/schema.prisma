@@ -29,10 +29,32 @@ model Boat {
   prixJour    Decimal  @default(0) @db.Decimal(8, 2)
   caution     Decimal  @default(0) @db.Decimal(8, 2)
   capacite    Int      @db.SmallInt
-  Nreviews    Int      @db.SmallInt
-  Ncabine     Int      @db.SmallInt
-  star        Int      @db.SmallInt
-  speed       Int      @default(0) @db.SmallInt
-  fuel        Int      @default(0) @db.SmallInt
-  description String   @default("description") @db.VarChar(1024)
+
+  Nreviews        Int    @db.SmallInt
+  Ncabine         Int    @db.SmallInt
+  star            Int    @db.SmallInt
+  speed           Int    @default(0) @db.SmallInt
+  fuel            Int    @default(0) @db.SmallInt
+  description     String @default("description") @db.VarChar(1024)
+  caracteristique String @default("caractéristique") @db.VarChar(1024)
+  equipement      String @default("equipement") @db.VarChar(1024)
+  electronique    String @default("electronique") @db.VarChar(1024)
+  confort         String @default("confort") @db.VarChar(1024)
+}
+
+model Demande {
+  id        Int      @id @default(autoincrement())
+  startDate DateTime @db.Date
+  endDate   DateTime @db.Date
+  guests    Int      @db.SmallInt
+  nom       String   @db.VarChar(255)
+  email     String   @db.VarChar(255)
+  telephone String   @db.VarChar
+}
+
+model User {
+  id         String   @id @default(uuid())
+  login      String   @unique @db.VarChar(255)
+  pass       String   @db.VarChar(255)
+  createDate DateTime @default(now()) @db.Date
 }

@@ -40,6 +40,10 @@ export const links: LinksFunction = () => [
   },
 ];
 
+export const useClientEnv = () => {
+  return useLoaderData<typeof loader>().clientEnv;
+};
+
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
